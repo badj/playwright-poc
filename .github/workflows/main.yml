@@ -5,6 +5,8 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  schedule:
+    - cron: '30 19 * * *'  # 7:30 am NZT (UTC+12)  
 
 jobs:
   test:
