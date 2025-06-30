@@ -1,8 +1,14 @@
+# Playwright POC
+
 ## E-commerce checkout journey tests showcasing the use and implementation of [Playwright](https://playwright.dev/) as a Test Framework
 
 ---
 
 > This repo contains Playwright tests for an e-commerce store checkout journey with assertions on the ["Test Automation - Big Cartel E-commerce Test store"](https://testautomation.bigcartel.com/) to showcase the Playwright Test Framework running locally or with [Docker](https://www.docker.com/) via [GitHub Actions](https://github.com/features/actions).
+
+---
+
+[![Playwright Tests in Docker](https://github.com/badj/Playwright-poc/actions/workflows/main.yml/badge.svg)](https://github.com/badj/Playwright-poc/actions/workflows/main.yml)
 
 ---
 
