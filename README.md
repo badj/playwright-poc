@@ -1,62 +1,82 @@
 # Playwright POC
 
-## E-commerce checkout journey tests showcasing the use and implementation of [Playwright](https://playwright.dev/) as a Test Framework
-
----
-
-> This repo contains Playwright tests for an e-commerce store checkout journey with assertions on the ["Test Automation - Big Cartel E-commerce Test store"](https://testautomation.bigcartel.com/) to showcase the Playwright Test Framework running locally or with [Docker](https://www.docker.com/) via [GitHub Actions](https://github.com/features/actions).
+> A proof of concept showcasing the implementation of [Playwright](https://playwright.dev/) as a test framework testing the checkout flow for the ["Test Automation - Big Cartel E-commerce Test store"](https://testautomation.bigcartel.com/).
 
 ---
 
 [![Playwright Tests in Docker](https://github.com/badj/Playwright-poc/actions/workflows/main.yml/badge.svg)](https://github.com/badj/Playwright-poc/actions/workflows/main.yml)
 
 ---
+### Overview
 
-### Project information
+This repository demonstrates:
 
-> #### This project contains two Playwright functional journey tests for multiple specs to verify:
-> - Searching for the item in the store
-> - Viewing the product from the results returned in the search
-> - Choosing colour option from a dropdown selection
-> - Choosing age option from a dropdown selection
-> - Increasing the quantity of items
-> - Proceeding to the cart
-> - Asserting and verifying items added to cart in the checkout cart for:
->    - *correct items*
->    - *options selected*
->    - *quantities*
->    - *cart item prices*
->    - *cart totals*
+- Playwright Testing Framework.
+- **Local Execution**: Run tests locally with multiple browser options.
+- **CI/CD Integration**: Executes tests in a [Docker container](https://www.docker.com/) via [GitHub Actions](https://github.com/badj/Playwright-poc/actions), triggered on push/pull requests to the main branch and daily scheduled runs.
 
 ---
+### Project information
 
-> #### CI/CD showcasing:
+#### This project contains two Playwright functional journey tests for multiple specs to verify:
+- Search for an item in the store.
+- View a product from search results.
+- Select color and age options from dropdowns.
+- Increase item quantity.
+- Proceed to the cart.
+- Verify cart details, including:
+    - Correct items.
+    - Selected options.
+    - Quantities.
+    - Item prices and cart totals.
+
+---
+### CI/CD showcasing:
 > - [GitHub workflow support](https://github.com/badj/Playwright-poc/actions) to the run the Playwright tests in a [Docker container](https://www.docker.com/) using [Github actions triggered on push/pull request to main and daily scheduled runs](.github/workflows/main.yml)
 
 ---
-
 ### Pre-requisites
 
 1. [NodeJS installed](https://nodejs.org/en/download/)
 2. [npm installed](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm/)
 
 ---
+### Setup
 
-### Install Playwright:
-
-1. Initialize a Node.js project: 
-```npm init -y```
-2. Install Playwright: 
-```npm i -D @playwright/test```
-3. Install browsers: 
-```npx playwright install```
+1. Clone or Download
+    - Clone this repository: `git clone https://github.com/badj/Playwright-poc.git`
+    - Alternatively, download the ZIP file and extract it.
+2. Navigate to Project Directory:
+   ```bash
+   cd Playwright-poc
+   ```
+3. Initialize a Node.js project
+   ```bash
+   npm init -y
+   ```
+4. Install Playwright
+   ```bash
+   npm i -D @playwright/test
+   ```
+5. Install browsers
+   ```bash
+   npx playwright install
+   ``` 
 
 ---
-
 ### Run the Test and view the report:
 
-1. Execute the test with: ```npx playwright test```
-2. View the HTML report when test execution completed: ```npx playwright show-report```
-3. Execute the test with the UI: ```npx playwright test --ui```
+1. Execute the test with
+   ```bash
+   npx playwright test
+   ``` 
+2. View the HTML report when test execution completed
+   ```bash
+   npx playwright show-report
+   ``` 
+3. Execute the test with the UI
+   ```bash
+   npx playwright test --ui
+   ``` 
 
 ---
