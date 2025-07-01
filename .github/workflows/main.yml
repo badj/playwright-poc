@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: '30 19 * * *'  # 7:30 am NZT (UTC+12)  
+    - cron: '30 19 * * *'  # 7:30 am NZT (UTC+12)
 
 jobs:
   test:
@@ -35,7 +35,7 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}:/work \
             -w /work \
-            mcr.microsoft.com/playwright:v1.52.0-jammy \
+            mcr.microsoft.com/playwright:v1.53.2-jammy \
             npx playwright test
 
       - name: Upload Playwright HTML report
