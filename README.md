@@ -4,7 +4,7 @@
 
 ---
 
-[![Playwright Tests in Docker](https://github.com/badj/Playwright-poc/actions/workflows/main.yml/badge.svg)](https://github.com/badj/Playwright-poc/actions/workflows/main.yml)
+[![Playwright Tests in Docker](https://github.com/badj/playwright-poc/actions/workflows/main.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/main.yml)
 
 ---
 ### Overview
@@ -13,7 +13,7 @@ This repository demonstrates:
 
 - Playwright Testing Framework.
 - **Local Execution**: Run tests locally with multiple browser options.
-- **CI/CD Integration**: Executes tests in a [Docker container](https://www.docker.com/) via [GitHub Actions](https://github.com/badj/Playwright-poc/actions), triggered on push/pull requests to the main branch and daily scheduled runs.
+- **CI/CD Integration**: Executes tests in a [Docker container](https://www.docker.com/) via [GitHub Actions](https://github.com/badj/playwright-poc/actions), triggered on push/pull requests to the main branch and daily scheduled runs.
 
 ---
 ### Project information
@@ -33,7 +33,7 @@ This project contains a Playwright functional journey test to verify multiple ar
 
 ---
 ### CI/CD showcasing:
-> - [GitHub workflow support](https://github.com/badj/Playwright-poc/actions) to the run the Playwright tests in a [Docker container](https://www.docker.com/) using [Github actions triggered on push/pull request to main and daily scheduled runs](.github/workflows/main.yml)
+> - [GitHub workflow support](https://github.com/badj/playwright-poc/actions) to the run the Playwright tests in a [Docker container](https://www.docker.com/) using [Github actions triggered on push/pull request to main and daily scheduled runs](.github/workflows/main.yml)
 
 ---
 ### Pre-requisites
@@ -45,11 +45,11 @@ This project contains a Playwright functional journey test to verify multiple ar
 ### Setup
 
 1. Clone or Download
-    - Clone this repository: `git clone https://github.com/badj/Playwright-poc.git`
+    - Clone this repository: `git clone https://github.com/badj/playwright-poc.git`
     - Alternatively, download the ZIP file and extract it.
 2. Navigate to Project Directory:
    ```bash
-   cd Playwright-poc
+   cd playwright-poc
    ```
 3. Initialize a Node.js project
    ```bash
