@@ -1,6 +1,6 @@
 # Playwright POC
 
-> A proof of concept showcasing the implementation of [Playwright](https://playwright.dev/) as a test framework testing the checkout flow for the ["Test Automation - Big Cartel E-commerce Test store"](https://testautomation.bigcartel.com/).
+> A proof of concept showcasing the implementation of [Playwright](https://playwright.dev/) as a test framework to test the checkout flow for the ["Test Automation - Big Cartel E-commerce Test store"](https://testautomation.bigcartel.com/).
 
 ---
 
@@ -18,7 +18,8 @@ This repository demonstrates:
 ---
 ### Project information
 
-#### This project contains two Playwright functional journey tests for multiple specs to verify:
+This project contains a Playwright functional journey test to verify multiple areas of the e-commerce checkout flow: 
+
 - Search for an item in the store.
 - View a product from search results.
 - Select color and age options from dropdowns.
