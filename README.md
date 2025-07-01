@@ -33,7 +33,7 @@ This project contains a Playwright functional journey test to verify multiple ar
 
 ---
 ### CI/CD showcasing:
-> - [GitHub workflow support](https://github.com/badj/playwright-poc/actions) to the run the Playwright tests in a [Docker container](https://www.docker.com/) using [Github actions triggered on push/pull request to main and daily scheduled runs](.github/workflows/main.yml)
+> - [GitHub workflow support](https://github.com/badj/playwright-poc/actions) to the run the Playwright tests in a [Docker container](https://www.docker.com/) using [GitHub actions triggered on push/pull request to main and daily scheduled runs](.github/workflows/main.yml)
 
 ---
 ### Pre-requisites
