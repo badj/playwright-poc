@@ -1,12 +1,18 @@
 name: Playwright Tests with Allure Report
 
+# This GitHub Actions workflow runs Playwright tests and generates an Allure report:
+#  - It works, but it doesn't load the report data objects due to a "blocked by CORS policy" error:
+#  - Access to XMLHttpRequest at 'allure-report/widgets/suites.json' from origin 'null' has been blocked by CORS policy: Cross origin requests are only supported for protocol schemes: chrome, chrome-extension, chrome-untrusted, data, http, https, isolated-app.
+#  - TODO: Scheduled and push and pull triggers disabled and keeping this workflow for future reference or to fix at a later stage.
+#  - Allure reports can still be generated for local runs to showcase the Allure reporter integration/support for this project.
+
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  schedule:
-    - cron: '30 19 * * *'  # 7:30 am NZT (UTC+12)
+#  push:
+#    branches: [ main ]
+#  pull_request:
+#    branches: [ main ]
+#  schedule:
+#    - cron: '30 19 * * *'  # 7:30 am NZT (UTC+12)
 
 jobs:
   test:
@@ -38,24 +44,15 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      # Step 6: Run Playwright tests - TODO: Testing it without docker run
+      # Step 6: Run Playwright tests
       - name: Run Playwright tests
         run: npx playwright test
         env:
           CI: true
 
-      # Step 6: Run Playwright tests - TODO: Testing it with docker run (it works) - Choose between this step or simplified step above!
-#      - name: Run Playwright tests in Docker
-#        run: |
-#          docker run --rm \
-#            -v ${{ github.workspace }}:/work \
-#            -w /work \
-#            mcr.microsoft.com/playwright:v1.53.2-jammy \
-#            npx playwright test
-
-#      TODO: Remove when workflow issues are all resolved!
-#      - name: Debug GITHUB_WORKSPACE
-#        run: echo "GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
+      # Debug step: Debug GITHUB_WORKSPACE
+      - name: Debug GITHUB_WORKSPACE
+        run: echo "GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
 
       # Step 7: Install Allure CLI - failing
       - name: Install Allure CLI
@@ -67,7 +64,7 @@ jobs:
           echo $PATH
 #          allure --version TODO: resolve this or remove it!
 
-#      TODO: Remove when workflow issues are all resolved!
+      # Debug step: allure-results directory
       - name: Debug allure-results directory
         run: ls -la allure-results || echo "allure-results does not exist"
 
@@ -81,9 +78,7 @@ jobs:
 
       # Step 9: Generate Allure report
       - name: Generate Allure report
-        # run: allure generate allure-results -o allure-report --clean TODO: Using command below (clean option removed) to test if it resolves the empty report
-#        run: allure generate allure-results -o allure-report TODO: This didn't fix the issue - Using command below (clean option added gain but no "-o" option) to test if it resolves the empty report
-        run: allure generate allure-results allure-report-html --clean
+        run: allure generate allure-results -o allure-report --clean
 
       # Step 10: Upload Allure report as artifact
       - name: Upload Allure report

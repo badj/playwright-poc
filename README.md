@@ -7,17 +7,22 @@
 
 This repository demonstrates:
 
-- Playwright Testing Framework to run tests locally with multiple browsers.
+- Playwright Testing Framework to run tests locally.
+- Test run reporting generated with:
+  - [Built-in/Default Playwright HTML reporter](https://playwright.dev/docs/test-reporters)
+  - [Allure reporter](https://allurereport.org/)
 - CI/CD Integration / [GitHub workflow support](https://github.com/badj/playwright-poc/actions) executing tests in [Docker](https://www.docker.com/) with GitHub Actions triggered on push/pull requests to main and for daily scheduled runs:
-  
   - [![Playwright Tests in Docker](https://github.com/badj/playwright-poc/actions/workflows/main.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/main.yml)
   - [![Playwright Tests with Allure Report](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml)
-
+    - The passing workflow badge above is a false positive!
+    - GitHub Actions to trigger on push/pull requests to main and daily scheduled runs has been disabled until the issue can be resolved.
+    - Workflow runs without error, generates the artifact, but it doesn't load the report data objects when the index.html is viewed in the downloaded artifact due to a "blocked by CORS policy" issue.
+    - Using the allure command line tool to open and serve the report from the downloaded artifact root is failing as well and will be investigated at a later stage.
 
 ---
 ### Project information
 
-This project contains a Playwright functional journey test to verify multiple areas of the e-commerce checkout flow: 
+> This project contains a Playwright functional journey test to verify multiple areas of the e-commerce checkout flow
 
 - Search for an item in the store.
 - View a product from the search results.
@@ -60,19 +65,35 @@ This project contains a Playwright functional journey test to verify multiple ar
    ``` 
 
 ---
-### Run the Test and view the report:
+### Run the Test local and view the HTML report - Generated with the default Playwright HTML reporter:
 
 1. Execute the test with
    ```bash
    npx playwright test
-   ``` 
-2. View the HTML report when test execution completes
-   ```bash
-   npx playwright show-report
-   ``` 
-3. Execute the test with the UI
+   ```
+2. OR Execute the test with the UI
    ```bash
    npx playwright test --ui
    ``` 
+3. View the HTML report when test execution completes
+   ```bash
+   npx playwright show-report
+   ```
+
+---
+### Run the Test local and view the Allure report - Generated with the Allure reporter:
+
+1. Execute the test with
+   ```bash
+   npx playwright test
+   ```
+2. OR Execute the test with the UI
+   ```bash
+   npx playwright test --ui
+   ``` 
+3. View the HTML report when test execution completes
+   ```bash
+   allure generate allure-results -o allure-report --clean 
+   ```
 
 ---
