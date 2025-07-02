@@ -6,13 +6,13 @@ name: Playwright Tests with Allure Report
 #  - TODO: Scheduled and push and pull triggers disabled and keeping this workflow for future reference or to fix at a later stage.
 #  - Allure reports can still be generated for local runs to showcase the Allure reporter integration/support for this project.
 
-#on:
-#  push:
-#    branches: [ main ]
-#  pull_request:
-#    branches: [ main ]
-#  schedule:
-#    - cron: '30 19 * * *'  # 7:30 am NZT (UTC+12)
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '30 19 * * *'  # 7:30 am NZT (UTC+12)
 
 jobs:
   test:
