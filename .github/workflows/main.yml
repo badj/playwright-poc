@@ -30,13 +30,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run Playwright tests in Docker
-        run: |
-          docker run --rm \
-            -v ${{ github.workspace }}:/work \
-            -w /work \
-            mcr.microsoft.com/playwright:v1.53.2-jammy \
-            npx playwright test
+#      - name: Run Playwright tests in Docker
+#        run: |
+#          docker run --rm \
+#            -v ${{ github.workspace }}:/work \
+#            -w /work \
+#            mcr.microsoft.com/playwright:v1.53.2-jammy \
+#            npx playwright test
+
+      - name: Run Playwright tests
+        run: npx playwright test
+        env:
+          CI: true
 
       - name: Upload Playwright HTML report
         if: always()
