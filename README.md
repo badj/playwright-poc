@@ -14,8 +14,8 @@ This repository demonstrates:
 - CI/CD Integration / [GitHub workflow support](https://github.com/badj/playwright-poc/actions) executing tests in [Docker](https://www.docker.com/) with GitHub Actions triggered on push/pull requests to main and for daily scheduled runs:
   - [![Playwright Tests in Docker](https://github.com/badj/playwright-poc/actions/workflows/main.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/main.yml)
   - [![Playwright Tests with Allure Report](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml)
-    - The passing workflow badge above is a false positive!
-    - GitHub Actions to trigger on push/pull requests to main and daily scheduled runs has been disabled until the issue can be resolved.
+    - Note: The passing workflow badge above is a false positive!
+    - Note: Workflow has been manually disabled in the GitHub Actions until the issue can be resolved!
     - Workflow runs without error, generates the artifact, but it doesn't load the report data objects when the index.html is viewed in the downloaded artifact due to a "blocked by CORS policy" issue.
     - Using the allure command line tool to open and serve the report from the downloaded artifact root is failing as well and will be investigated at a later stage.
 
