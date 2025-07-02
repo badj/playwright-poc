@@ -1,0 +1,72 @@
+name: Playwright Tests with Allure Report
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '30 19 * * *'  # 7:30 am NZT (UTC+12)
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Step 3: Install Java (required for Allure CLI)
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # Step 4: Install dependencies
+      - name: Install npm dependencies
+        run: npm ci
+
+      # Step 5: Install Playwright browsers
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      # Step 6: Run Playwright tests - TODO: Testing it without docker run - May fail
+      - name: Run Playwright tests
+        run: npx playwright test
+        env:
+          CI: true
+
+      # Step 7: Install Allure CLI
+      - name: Install Allure CLI
+        run: |
+          wget https://github.com/allure-framework/allure2/releases/download/2.29.0/allure-2.29.0.tgz
+          tar -zxvf allure-2.29.0.tgz -C /usr/local
+          sudo ln -s /usr/local/allure-2.29.0/bin/allure /usr/local/bin/allure
+          allure --version
+
+      # Step 8: Add environment information
+      - name: Add environment information
+        run: |
+          echo "OS=Ubuntu" > allure-results/environment.properties
+          echo "NodeVersion=$(node --version)" >> allure-results/environment.properties
+          echo "PlaywrightVersion=$(npx playwright --version | awk '{print $2}')" >> allure-results/environment.properties
+
+      # Step 9: Generate Allure report
+      - name: Generate Allure report
+        run: allure generate allure-results -o allure-report --clean
+
+      # Step 10: Upload Allure report as artifact
+      - name: Upload Allure report
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report/
+        if: always()

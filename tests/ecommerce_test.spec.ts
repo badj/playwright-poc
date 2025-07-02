@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { allure } from 'allure-playwright';
 
 test.describe('E-commerce Store Automation', () => {
     test.beforeEach(async ({ page }) => {

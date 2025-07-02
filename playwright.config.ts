@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import * as os from "node:os";
 
 /**
  * Read environment variables from file.
@@ -13,33 +14,41 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests',
-  /* Run tests in files in parallel */
+  // Run tests in files in parallel
   fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
+  // Fail the build on CI if you accidentally left test.only in the source code.
   forbidOnly: !!process.env.CI,
   // Give failing tests 3 retry attempts
   retries: 3,
-  /* Retry on CI only */
+  // Retry on CI only
   // retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
+  // Opt out of parallel tests on CI.
   workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    // trace: 'on-first-retry',
-    trace: 'on',
-    // Record test run video
-    // video: 'on-first-retry',
+  // Reporter to use. See https://playwright.dev/docs/test-reporters
+  reporter: [
+      // Serve HTML report command 'npx playwright show-report'
+      ['html'],
+      // Default line reporter for console output
+      ['line'],
+      // Allure reporter: Generate and clean command 'allure generate allure-results -o allure-report --clean'
+      ['allure-playwright', { outputFolder: 'allure-results', environmentInfo: { OS: os.platform(), NodeVersion: process.version } }],
+      // ['allure-playwright', {outputFolder: 'allure-results'}, { environmentInfo: { OS: os.platform(), NodeVersion: process.version,},},],
+  ],
+    use: {
+    // Base URL to use in actions like `await page.goto('/')`
+    baseURL: 'https://testautomation.bigcartel.com/',
+    // Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer
+    // screenshot: 'on',
+    screenshot: 'only-on-failure',
     video: 'on',
-  },
+    // video: 'retain-on-failure',
+    // video: 'on-first-retry',
+    // trace: 'on',
+    // trace: 'retain-on-failure',
+    trace: 'on-first-retry',
+    },
 
-
-  /* Configure projects for major browsers */
+  // Configure projects for major browsers
   projects: [
     {
       name: 'chromium',
@@ -56,7 +65,7 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'] },
     },
 
-    /* Test against mobile viewports. */
+    // Test against mobile viewports
     // {
     //   name: 'Mobile Chrome',
     //   use: { ...devices['Pixel 5'] },
@@ -66,7 +75,7 @@ export default defineConfig({
     //   use: { ...devices['iPhone 12'] },
     // },
 
-    /* Test against branded browsers. */
+    // Test against branded browsers
     // Enable this to run tests against Edge as well
      // {
      //   name: 'Microsoft Edge',
@@ -78,7 +87,7 @@ export default defineConfig({
      // },
   ],
 
-  /* Run your local dev server before starting the tests */
+  // Run your local dev server before starting the tests
   // webServer: {
   //   command: 'npm run start',
   //   url: 'http://127.0.0.1:3000',
