@@ -38,13 +38,13 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      # Step 6: Run Playwright tests - TODO: Testing it without docker run - May fail
+      # Step 6: Run Playwright tests - TODO: Testing it without docker run
 #      - name: Run Playwright tests
 #        run: npx playwright test
 #        env:
 #          CI: true
 
-      # Step 6: Run Playwright tests - TODO: Testing it with docker run - May still fail on step 7!
+      # Step 6: Run Playwright tests - TODO: Testing it with docker run - worked - remove step above!
       - name: Run Playwright tests in Docker
         run: |
           docker run --rm \
@@ -53,12 +53,21 @@ jobs:
             mcr.microsoft.com/playwright:v1.53.2-jammy \
             npx playwright test
 
-      # Step 7: Install Allure CLI
+      # Step 7: Install Allure CLI - failing
+#      - name: Install Allure CLI
+#        run: |
+#          wget https://github.com/allure-framework/allure2/releases/download/2.29.0/allure-2.29.0.tgz
+#          tar -zxvf allure-2.29.0.tgz -C /usr/local
+#          sudo ln -s /usr/local/allure-2.29.0/bin/allure /usr/local/bin/allure
+#          allure --version
+
+      # Step 7: Install Allure CLI - failing
       - name: Install Allure CLI
         run: |
           wget https://github.com/allure-framework/allure2/releases/download/2.29.0/allure-2.29.0.tgz
-          tar -zxvf allure-2.29.0.tgz -C /usr/local
-          sudo ln -s /usr/local/allure-2.29.0/bin/allure /usr/local/bin/allure
+          mkdir -p $GITHUB_WORKSPACE/allure
+          tar -zxvf allure-2.29.0.tgz -C $GITHUB_WORKSPACE/allure
+          echo "$GITHUB_WORKSPACE/allure/allure-2.29.0/bin" >> $GITHUB_PATH
           allure --version
 
       # Step 8: Add environment information
