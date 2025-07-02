@@ -61,6 +61,9 @@ jobs:
 #          sudo ln -s /usr/local/allure-2.29.0/bin/allure /usr/local/bin/allure
 #          allure --version
 
+      - name: Debug GITHUB_WORKSPACE
+        run: echo "GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
+
       # Step 7: Install Allure CLI - failing
       - name: Install Allure CLI
         run: |
@@ -68,7 +71,8 @@ jobs:
           mkdir -p $GITHUB_WORKSPACE/allure
           tar -zxvf allure-2.29.0.tgz -C $GITHUB_WORKSPACE/allure
           echo "$GITHUB_WORKSPACE/allure/allure-2.29.0/bin" >> $GITHUB_PATH
-          allure --version
+          echo $PATH
+#          allure --version
 
       # Step 8: Add environment information
       - name: Add environment information
