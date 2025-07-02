@@ -39,19 +39,19 @@ jobs:
         run: npx playwright install --with-deps
 
       # Step 6: Run Playwright tests - TODO: Testing it without docker run
-#      - name: Run Playwright tests
-#        run: npx playwright test
-#        env:
-#          CI: true
+      - name: Run Playwright tests
+        run: npx playwright test
+        env:
+          CI: true
 
       # Step 6: Run Playwright tests - TODO: Testing it with docker run (it works) - Choose between this step or simplified step above!
-      - name: Run Playwright tests in Docker
-        run: |
-          docker run --rm \
-            -v ${{ github.workspace }}:/work \
-            -w /work \
-            mcr.microsoft.com/playwright:v1.53.2-jammy \
-            npx playwright test
+#      - name: Run Playwright tests in Docker
+#        run: |
+#          docker run --rm \
+#            -v ${{ github.workspace }}:/work \
+#            -w /work \
+#            mcr.microsoft.com/playwright:v1.53.2-jammy \
+#            npx playwright test
 
 #      TODO: Remove when workflow issues are all resolved!
 #      - name: Debug GITHUB_WORKSPACE
@@ -66,6 +66,10 @@ jobs:
           echo "$GITHUB_WORKSPACE/allure/allure-2.29.0/bin" >> $GITHUB_PATH
           echo $PATH
 #          allure --version TODO: resolve this or remove it!
+
+#      TODO: Remove when workflow issues are all resolved!
+      - name: Debug allure-results directory
+        run: ls -la allure-results || echo "allure-results does not exist"
 
       # Step 8: Add environment information
       - name: Add environment information
