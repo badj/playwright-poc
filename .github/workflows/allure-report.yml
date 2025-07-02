@@ -39,10 +39,19 @@ jobs:
         run: npx playwright install --with-deps
 
       # Step 6: Run Playwright tests - TODO: Testing it without docker run - May fail
-      - name: Run Playwright tests
-        run: npx playwright test
-        env:
-          CI: true
+#      - name: Run Playwright tests
+#        run: npx playwright test
+#        env:
+#          CI: true
+
+      # Step 6: Run Playwright tests - TODO: Testing it with docker run - May still fail on step 7!
+      - name: Run Playwright tests in Docker
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/work \
+            -w /work \
+            mcr.microsoft.com/playwright:v1.53.2-jammy \
+            npx playwright test
 
       # Step 7: Install Allure CLI
       - name: Install Allure CLI
