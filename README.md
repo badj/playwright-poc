@@ -3,17 +3,16 @@
 > A proof of concept showcasing the implementation of [Playwright](https://playwright.dev/) as a test framework to test the checkout flow for the ["Test Automation - Big Cartel E-commerce Test store"](https://testautomation.bigcartel.com/).
 
 ---
-
-[![Playwright Tests in Docker](https://github.com/badj/playwright-poc/actions/workflows/main.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/main.yml)
-
----
 ### Overview
 
 This repository demonstrates:
 
-- Playwright Testing Framework.
-- **Local Execution**: Run tests locally with multiple browser options.
-- **CI/CD Integration**: Executes tests in a [Docker container](https://www.docker.com/) via [GitHub Actions](https://github.com/badj/playwright-poc/actions), triggered on push/pull requests to the main branch and daily scheduled runs.
+- Playwright Testing Framework to run tests locally with multiple browsers.
+- CI/CD Integration / [GitHub workflow support](https://github.com/badj/playwright-poc/actions) executing tests in [Docker](https://www.docker.com/) with GitHub Actions triggered on push/pull requests to main and for daily scheduled runs:
+  
+  - [![Playwright Tests in Docker](https://github.com/badj/playwright-poc/actions/workflows/main.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/main.yml)
+  - [![Playwright Tests with Allure Report](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml)
+
 
 ---
 ### Project information
@@ -21,8 +20,8 @@ This repository demonstrates:
 This project contains a Playwright functional journey test to verify multiple areas of the e-commerce checkout flow: 
 
 - Search for an item in the store.
-- View a product from search results.
-- Select color and age options from dropdowns.
+- View a product from the search results.
+- Select colour and age options from the dropdowns.
 - Increase item quantity.
 - Proceed to the cart.
 - Verify cart details, including:
@@ -30,10 +29,6 @@ This project contains a Playwright functional journey test to verify multiple ar
     - Selected options.
     - Quantities.
     - Item prices and cart totals.
-
----
-### CI/CD showcasing:
-> - [GitHub workflow support](https://github.com/badj/playwright-poc/actions) to the run the Playwright tests in a [Docker container](https://www.docker.com/) using [GitHub actions triggered on push/pull request to main and daily scheduled runs](.github/workflows/main.yml)
 
 ---
 ### Pre-requisites
@@ -51,7 +46,7 @@ This project contains a Playwright functional journey test to verify multiple ar
    ```bash
    cd playwright-poc
    ```
-3. Initialize a Node.js project
+3. Initialise a Node.js project
    ```bash
    npm init -y
    ```
@@ -71,7 +66,7 @@ This project contains a Playwright functional journey test to verify multiple ar
    ```bash
    npx playwright test
    ``` 
-2. View the HTML report when test execution completed
+2. View the HTML report when test execution completes
    ```bash
    npx playwright show-report
    ``` 
