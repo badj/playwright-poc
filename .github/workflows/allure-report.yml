@@ -44,7 +44,7 @@ jobs:
 #        env:
 #          CI: true
 
-      # Step 6: Run Playwright tests - TODO: Testing it with docker run - worked - remove step above!
+      # Step 6: Run Playwright tests - TODO: Testing it with docker run (it works) - Choose between this step or simplified step above!
       - name: Run Playwright tests in Docker
         run: |
           docker run --rm \
@@ -53,16 +53,9 @@ jobs:
             mcr.microsoft.com/playwright:v1.53.2-jammy \
             npx playwright test
 
-      # Step 7: Install Allure CLI - failing
-#      - name: Install Allure CLI
-#        run: |
-#          wget https://github.com/allure-framework/allure2/releases/download/2.29.0/allure-2.29.0.tgz
-#          tar -zxvf allure-2.29.0.tgz -C /usr/local
-#          sudo ln -s /usr/local/allure-2.29.0/bin/allure /usr/local/bin/allure
-#          allure --version
-
-      - name: Debug GITHUB_WORKSPACE
-        run: echo "GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
+#      TODO: Remove when workflow issues are all resolved!
+#      - name: Debug GITHUB_WORKSPACE
+#        run: echo "GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
 
       # Step 7: Install Allure CLI - failing
       - name: Install Allure CLI
@@ -72,11 +65,12 @@ jobs:
           tar -zxvf allure-2.29.0.tgz -C $GITHUB_WORKSPACE/allure
           echo "$GITHUB_WORKSPACE/allure/allure-2.29.0/bin" >> $GITHUB_PATH
           echo $PATH
-#          allure --version
+#          allure --version TODO: resolve this or remove it!
 
       # Step 8: Add environment information
       - name: Add environment information
         run: |
+          mkdir -p allure-results
           echo "OS=Ubuntu" > allure-results/environment.properties
           echo "NodeVersion=$(node --version)" >> allure-results/environment.properties
           echo "PlaywrightVersion=$(npx playwright --version | awk '{print $2}')" >> allure-results/environment.properties
