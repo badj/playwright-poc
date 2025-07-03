@@ -30,9 +30,15 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
-#      Disable this step when the "Run Playwright tests in Docker" step is enabled/required again and "CI: true" not used!
+#      Enable this step when switching to use "Run Playwright tests - CI: true" instead of "Run Playwright tests in Docker" step - runtime performance is slower than using docker runner!
 #      - name: Install Playwright browsers
 #        run: npx playwright install --with-deps
+
+#      Enable this step when switching to use "Run Playwright tests - CI: true" instead of "Run Playwright tests in Docker" step - runtime performance is slower than using docker runner!
+#      - name: Run Playwright tests
+#        run: npx playwright test
+#        env:
+#          CI: true
 
       - name: Run Playwright tests in Docker
         run: |
@@ -41,11 +47,6 @@ jobs:
             -w /work \
             mcr.microsoft.com/playwright:v1.53.2-jammy \
             npx playwright test
-
-#      - name: Run Playwright tests
-#        run: npx playwright test
-#        env:
-#          CI: true
 
       - name: Upload Playwright HTML report
         if: always()
