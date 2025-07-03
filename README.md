@@ -76,7 +76,7 @@ This repository demonstrates:
    ```bash
    npx playwright test --ui
    ``` 
-3. View the HTML report when test execution completes
+3. View the HTML report when test execution completes - Command will print to the terminal
    ```bash
    npx playwright show-report
    ```
@@ -92,9 +92,18 @@ This repository demonstrates:
    ```bash
    npx playwright test --ui
    ``` 
-3. View the HTML report when test execution completes
+3. Generate and view the HTML report when test execution completes - Report will be generated in [allure-report/index.html](allure-report/index.html)
    ```bash
    allure generate allure-results -o allure-report --clean 
    ```
+4. Generate the report and open it automatically on the web server - Report will be generated in [allure-report/index.html](allure-report/index.html)
+   ```bash
+   allure generate allure-results -o allure-report --clean && allure open allure-report && echo "file://$(pwd)/allure-report/index.html" 
+   ```   
+- A hyperlink to the webserver will be printed to the terminal that link through to the generated report - sample output:
+
+  ```
+  Server started at <http://127.0.0.1:56217>. Press <Ctrl+C> to exit
+  ```
 
 ---
