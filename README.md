@@ -16,8 +16,9 @@ This repository demonstrates:
   - [![Playwright Tests with Allure Report](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml)
     - Note: The passing workflow badge above is a false positive!
     - Note: Workflow has been manually disabled in the GitHub Actions until the issue can be resolved!
-    - Workflow runs without error, generates the artifact, but it doesn't load the report data objects when the index.html is viewed in the downloaded artifact due to a "blocked by CORS policy" issue.
-    - Using the allure command line tool to open and serve the report from the downloaded artifact root is failing as well and will be investigated at a later stage.
+    - Workflow runs without error in the workspace, generates the artefact, but it doesn't load the report data objects when the index.html is viewed in the downloaded artefact due to a "blocked by CORS policy" issue.
+    - Using the allure command line tool to open and serve the report from the downloaded artefact root is failing as well, and will be investigated at a later stage.
+    - Will update it at some stage to use GitHub Pages instead, as it's the best practice/works.
 
 ---
 ### Project information
@@ -65,7 +66,7 @@ This repository demonstrates:
    ``` 
 
 ---
-### Run the Test local and view the HTML report - Generated with the default Playwright HTML reporter:
+### Run the Test locally and view the HTML report - Generated with the default Playwright HTML reporter:
 
 1. Execute the test with
    ```bash
@@ -81,7 +82,7 @@ This repository demonstrates:
    ```
 
 ---
-### Run the Test local and view the Allure report - Generated with the Allure reporter:
+### Run the Test locally and view the Allure report - Generated with the Allure reporter:
 
 1. Execute the test with
    ```bash
