@@ -31,21 +31,21 @@ jobs:
         run: npm ci
 
 #      Disable this step when the "Run Playwright tests in Docker" step is enabled/required again and "CI: true" not used!
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+#      - name: Install Playwright browsers
+#        run: npx playwright install --with-deps
 
-#      - name: Run Playwright tests in Docker
-#        run: |
-#          docker run --rm \
-#            -v ${{ github.workspace }}:/work \
-#            -w /work \
-#            mcr.microsoft.com/playwright:v1.53.2-jammy \
-#            npx playwright test
+      - name: Run Playwright tests in Docker
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/work \
+            -w /work \
+            mcr.microsoft.com/playwright:v1.53.2-jammy \
+            npx playwright test
 
-      - name: Run Playwright tests
-        run: npx playwright test
-        env:
-          CI: true
+#      - name: Run Playwright tests
+#        run: npx playwright test
+#        env:
+#          CI: true
 
       - name: Upload Playwright HTML report
         if: always()
