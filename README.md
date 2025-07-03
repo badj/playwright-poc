@@ -13,14 +13,13 @@
   - [Allure reporter](https://allurereport.org/)
 - CI/CD Integration for [GitHub workflow support](https://github.com/badj/playwright-poc/actions) executing tests in [Docker](https://www.docker.com/) with GitHub Actions triggered on push/pull requests to main and for daily scheduled runs:
   - [![Playwright Tests in Docker](https://github.com/badj/playwright-poc/actions/workflows/main.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/main.yml)
-  - [![Playwright Tests with Allure Report](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml) 
-<br>
-  > **Note:** 
-  > - The passing "Playwright Tests with Allure Report" workflow badge above is a false positive!
-  > - Workflow has been manually disabled in the GitHub Actions until the issue can be resolved!
-  > - Workflow runs without error in the workspace, generates the artefact, but it doesn't load the report data objects when the index.html is viewed in the downloaded artefact due to a "blocked by CORS policy" issue. 
-  > - Using the allure command line tool to open and serve the report from the downloaded artefact root is failing as well, and will be investigated at a later stage. 
-  > - WIP/Will update it at some stage to use GitHub Pages instead, as it's the best practice/works.
+  - [![Playwright Tests with Allure Report](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml)
+    
+    > - The passing **"Playwright Tests with Allure Report"** workflow badge above is a false positive!
+    > - Workflow has been manually disabled in the GitHub Actions until the issue can be resolved!
+    > - **Current Issue:** Workflow runs without error in the workspace, generates the artefact, but it doesn't load the report data objects when the index.html is viewed in the downloaded artefact due to a "blocked by CORS policy" issue. 
+    > - **Current Issue:** Using the allure command line tool to open and serve the report from the downloaded artefact root is failing as well, and will be investigated at a later stage. 
+    > - **TODO/WIP:** Will be updated at some stage to use GitHub Pages instead to resolve the issue.
 
 ---
 ### Project information
