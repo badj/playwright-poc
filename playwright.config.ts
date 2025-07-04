@@ -32,7 +32,6 @@ export default defineConfig({
       ['line'],
       // Allure reporter: Generate and clean command 'allure generate allure-results -o allure-report --clean'
       ['allure-playwright', { outputFolder: 'allure-results', environmentInfo: { OS: os.platform(), NodeVersion: process.version } }],
-      // ['allure-playwright', {outputFolder: 'allure-results'}, { environmentInfo: { OS: os.platform(), NodeVersion: process.version,},},],
   ],
     use: {
     // Base URL to use in actions like `await page.goto('/')`
