@@ -129,47 +129,48 @@ This repository demonstrates:
 > Your current Node.js version is older than the recommended LTS version.
 > Playwright requires a more recent version of Node.js. As of Playwright v1.54.1, the minimum supported Node.js version is typically Node.js 16 or higher.
 
-- **To resolve the issue:**
-  - Update Node.js using nvm (Node Version Manager), which you appear to be using:
-  - Install Node.js 18 (LTS) or a newer version like 20
+**To resolve the issue:**
 
-  ```bash
+1. Update Node.js using nvm (Node Version Manager) - Install Node.js 18 (LTS) or a newer version like 20
+```bash
   nvm install 18
-  ```
-  - Switch to the new version
-  ```bash
+```
+2. Switch to the new version
+```bash
   nvm use 18
-  ```
-  - Set it as the default version
-  ```bash
+```
+3. Set it as the default version
+```bash
   nvm alias default 18
-  ```
-  - Verify the Node.js version - Ensure it’s at least v16 or higher.
-  ```bash
+```
+4. Verify the Node.js version - Ensure it’s at least v16 or higher.
+```bash
   node -v
-  ```
-  - Verify npm version:
-  ```bash
+```
+5. Verify npm version:
+```bash
   npm -v
-  ```
-  - Clear npm Cache and Reinstall Dependencies - The error may be caused by a corrupted npm cache or incomplete dependency installation. 
-  - This ensures a clean slate for dependency installation, avoiding issues from cached or corrupted files.
-  ```bash
+```
+
+**Additional steps if steps above steps do not resolvce it:**
+
+6. Clear npm Cache and Reinstall Dependencies → The error may be caused by a corrupted npm cache or incomplete dependency installation
+> This ensures a clean slate for dependency installation, avoiding issues from cached or corrupted files.
+```bash
   npm cache clean --force
-  ```
-  - Remove the node_modules directory and package-lock.json:
-    - Navigate to the project directory:
-    - Change to the playwright-poc project directory
-    ```bash
-    cd /Users/badj/Documents/Git/playwright-poc
-    ```
-    - Remove the node_modules directory and package-lock.json file:
-    ```bash
-    rm -rf node_modules package-lock.json
-    ```
-  - Reinstall dependencies:
-  ```bash
+```
+7. Remove the node_modules directory and package-lock.json → Navigate to the project directory
+> Change to the playwright-poc project directory (example for macOS)*:
+```bash
+  cd /Users/badj/Documents/Git/playwright-poc
+```
+8. Remove the node_modules directory and package-lock.json file:
+```bash
+  rm -rf node_modules package-lock.json
+```
+9. Reinstall dependencies:
+```bash
   npm install
-  ```
+```
 
 ---
