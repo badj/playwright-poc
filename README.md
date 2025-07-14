@@ -41,8 +41,8 @@ This repository demonstrates:
 ---
 ### Pre-requisites
 
-1. [Node.js](https://nodejs.org/en/download/)(LTS version recommended).
-2. [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm/)(Included with Node.js).
+1. [Node.js](https://nodejs.org/en/download/) (LTS version recommended)
+2. [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm/) (Included with Node.js)
 
 
 ---
