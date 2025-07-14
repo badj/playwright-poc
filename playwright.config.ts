@@ -32,19 +32,20 @@ export default defineConfig({
       ['line'],
       // Allure reporter: Generate and clean command 'allure generate allure-results -o allure-report --clean'
       ['allure-playwright', { outputFolder: 'allure-results', environmentInfo: { OS: os.platform(), NodeVersion: process.version } }],
+      ['monocart-reporter', { name: "Playwright POC Test Report", outputFile: './monocart-report/index.html'}]
   ],
     use: {
     // Base URL to use in actions like `await page.goto('/')`
     baseURL: 'https://testautomation.bigcartel.com/',
     // Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer
-    // screenshot: 'on',
-    screenshot: 'only-on-failure',
+    screenshot: 'on',
+    // screenshot: 'only-on-failure',
     video: 'on',
     // video: 'retain-on-failure',
     // video: 'on-first-retry',
-    // trace: 'on',
+    trace: 'on',
     // trace: 'retain-on-failure',
-    trace: 'on-first-retry',
+    // trace: 'on-first-retry',
     },
 
   // Configure projects for major browsers

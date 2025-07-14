@@ -5,21 +5,22 @@
 ---
 ### Overview
 
-**This repository demonstrates**:
-
-- Playwright Testing Framework to run tests locally.
-- Test run reporting generated with:
-  - [Built-in/Default Playwright HTML reporter](https://playwright.dev/docs/test-reporters)
-  - [Allure reporter](https://allurereport.org/)
-- CI/CD Integration for [GitHub workflow support](https://github.com/badj/playwright-poc/actions) executing tests in [Docker](https://www.docker.com/) with GitHub Actions triggered on push/pull requests to main and for daily scheduled runs:
-  - [![Playwright Tests in Docker](https://github.com/badj/playwright-poc/actions/workflows/main.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/main.yml)
-  - [![Playwright Tests with Allure Report](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml)
+This repository demonstrates: 
+ - Playwright Testing Framework to run tests locally. 
+ - Test run reporting generated with:
+   - [Built-in/Default Playwright HTML reporter](https://playwright.dev/docs/test-reporters)
+   - [Monocart reporter](https://github.com/cenfun/monocart-reporter)
+   - [Allure reporter](https://allurereport.org/)
+ - CI/CD Integration for [GitHub workflow support](https://github.com/badj/playwright-poc/actions) executing tests in [Docker](https://www.docker.com/) with GitHub Actions triggered on push/pull requests to main and for daily scheduled runs:
+   - [![Playwright Tests in Docker](https://github.com/badj/playwright-poc/actions/workflows/main.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/main.yml)
+   - [![Playwright Tests with Allure Report](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml) 
     
-    > - The passing **"Playwright Tests with Allure Report"** workflow badge above is a false positive!
-    > - Workflow has been manually disabled in the GitHub Actions until the issue can be resolved!
-    > - **Current Issue:** Workflow runs without error in the workspace, generates the artefact, but it doesn't load the report data objects when the index.html is viewed in the downloaded artefact due to a "blocked by CORS policy" issue. 
-    > - **Current Issue:** Using the allure command line tool to open and serve the report from the downloaded artefact root is failing as well, and will be investigated at a later stage. 
-    > - **TODO/WIP:** Will be updated at some stage to use GitHub Pages instead to resolve the issue.
+   >   - The passing workflow for **"Playwright Tests with Allure Report"**  is a false positive *(failing issues listed below)*, the workflow has been disabled in GitHub Actions until the issue can be resolved!
+   >   - Current Issues: 
+   >     - Workflow runs without error in the workspace, generates the artefact, but it doesn't load the report data objects when the index.html is viewed in the downloaded artefact due to a `blocked by CORS policy` issue. 
+   >     - Using the allure command line tool to open and serve the report from the downloaded artefact root is failing as well, and will be investigated at a later stage.
+   >   - TODO:
+   >     - Will be updated at some stage to use GitHub Pages instead to resolve the issue.
 
 ---
 ### Project information
@@ -40,8 +41,9 @@
 ---
 ### Pre-requisites
 
-1. [NodeJS installed](https://nodejs.org/en/download/)
-2. [npm installed](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm/)
+1. [Node.js](https://nodejs.org/en/download/)(LTS version recommended).
+2. [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm/)(Included with Node.js).
+
 
 ---
 ### Setup
@@ -67,7 +69,7 @@
    ``` 
 
 ---
-### Run the Test locally and view the HTML report - Generated with the default Playwright HTML reporter:
+### Run the Test locally and view the HTML report - Generated with the default Playwright HTML reporter
 
 1. Execute the test with
    ```bash
@@ -81,23 +83,34 @@
    ```bash
    npx playwright show-report
    ```
+- A hyperlink to the webserver will be printed to the terminal that link through to the generated report - sample output:
+
+  ```
+  Serving HTML report at http://localhost:9323. Press Ctrl+C to quit.
+  ```
 
 ---
-### Run the Test locally and view the Allure report - Generated with the Allure reporter:
+### Monocart reporter - View test result with the Monocart reporter
 
-1. Execute the test with
+1. Generate and view the HTML report when test execution completes - The Report open automatically and generated in [monocart-report/index.html](monocart-report/index.html)
    ```bash
-   npx playwright test
+   npx monocart show-report monocart-report/index.html
    ```
-2. OR Execute the test with the UI
-   ```bash
-   npx playwright test --ui
-   ``` 
-3. Generate and view the HTML report when test execution completes - Report will be generated in [allure-report/index.html](allure-report/index.html)
+- A hyperlink to the webserver will be printed to the terminal that link through to the generated report - sample output:
+
+  ```
+  serve dirs [ 'monocart-report', './' ]
+  7/8/2025, 10:26:33 PM server listening on http://localhost:8090/index.html
+  ```   
+
+---
+### Allure reporter - Generate and view test result with the Allure reporter
+
+1. Generate and view the HTML report when test execution completes - Report will be generated in [allure-report/index.html](allure-report/index.html)
    ```bash
    allure generate allure-results -o allure-report --clean 
    ```
-4. Generate the report and open it automatically on the web server - Report will be generated in [allure-report/index.html](allure-report/index.html)
+2. OR Generate the report and open it automatically on the web server - Report will be generated in [allure-report/index.html](allure-report/index.html)
    ```bash
    allure generate allure-results -o allure-report --clean && allure open allure-report && echo "file://$(pwd)/allure-report/index.html" 
    ```   
@@ -105,6 +118,58 @@
 
   ```
   Server started at <http://127.0.0.1:56217>. Press <Ctrl+C> to exit
+  ```
+
+---
+
+### Gotcha's:
+
+**1. Installing Playwright using `npm i -D @playwright/test` failing due to an unsupported Node.js version**
+
+> Your current Node.js version is older than the recommended LTS version.
+> Playwright requires a more recent version of Node.js. As of Playwright v1.54.1, the minimum supported Node.js version is typically Node.js 16 or higher.
+
+- **To resolve the issue:**
+  - Update Node.js using nvm (Node Version Manager), which you appear to be using:
+  - Install Node.js 18 (LTS) or a newer version like 20
+
+  ```bash
+  nvm install 18
+  ```
+  - Switch to the new version
+  ```bash
+  nvm use 18
+  ```
+  - Set it as the default version
+  ```bash
+  nvm alias default 18
+  ```
+  - Verify the Node.js version - Ensure it’s at least v16 or higher.
+  ```bash
+  node -v
+  ```
+  - Verify npm version:
+  ```bash
+  npm -v
+  ```
+  - Clear npm Cache and Reinstall Dependencies - The error may be caused by a corrupted npm cache or incomplete dependency installation. 
+  - This ensures a clean slate for dependency installation, avoiding issues from cached or corrupted files.
+  ```bash
+  npm cache clean --force
+  ```
+  - Remove the node_modules directory and package-lock.json:
+    - Navigate to the project directory:
+    - Change to the playwright-poc project directory
+    ```bash
+    cd /Users/badj/Documents/Git/playwright-poc
+    ```
+    - Remove the node_modules directory and package-lock.json file:
+    ```bash
+    rm -rf node_modules package-lock.json
+    ```
+  - Reinstall dependencies:
+  ```bash
+  npm install
   ```
 
 ---
