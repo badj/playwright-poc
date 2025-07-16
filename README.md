@@ -14,7 +14,7 @@
   - [Test run with Playwright HTML report generation](#test-run-with-playwright-html-report-generation)
   - [Test run with Monocart report generation](#test-run-with-monocart-report-generation)
   - [Test run with Allure report generation](#test-run-with-allure-report-generation)
-- [Gotchas](#gotchas)
+- [Gotcha's](#gotchas)
 
 ---
 
