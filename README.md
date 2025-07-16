@@ -146,7 +146,7 @@ This repository demonstrates:
 
 ---
 
-### Gotcha's:
+### Gotcha's
 
 **1. Installing Playwright using `npm i -D @playwright/test` failing due to an unsupported Node.js version**
 
