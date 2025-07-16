@@ -3,6 +3,22 @@
 > A proof of concept showcasing the implementation of [Playwright](https://playwright.dev/) as a test framework to test the checkout flow for the ["Test Automation - Big Cartel E-commerce Test store"](https://testautomation.bigcartel.com/).
 
 ---
+### Table of contents
+
+
+- [Overview](https://github.com/badj/playwright-poc/edit/main/README.md#overview)
+- [Project information](https://github.com/badj/playwright-poc/edit/main/README.md#project-information)
+- [Pre requisites](https://github.com/badj/playwright-poc/edit/main/README.md#pre-requisites)
+- [Setup](https://github.com/badj/playwright-poc/edit/main/README.md#setup)
+- [Run tests and generate the test run report to view test results](https://github.com/badj/playwright-poc/edit/main/README.md#run-tests-and-generate-the-test-run-report-to-view-the-test-results)
+  - [Test run with Playwright HTML report generation](https://github.com/badj/playwright-poc/edit/main/README.md#test-run-with-playwright-html-report-generation)
+  - [Test run with Monocart report generation](https://github.com/badj/playwright-poc/edit/main/README.md#test-run-with-monocart-report-generation)
+  - [Test run with Allure report generation](https://github.com/badj/playwright-poc/edit/main/README.md#test-run-with-allure-report-generation)
+- [Gotchas](https://github.com/badj/playwright-poc/edit/main/README.md#gotchas)
+
+---
+
+
 ### Overview
 
 This repository demonstrates: 
@@ -69,9 +85,11 @@ This repository demonstrates:
    ``` 
 
 ---
-### Run the Test locally and view the HTML report - Generated with the default Playwright HTML reporter
+### Run tests and generate the test run report to view the test results
 
-1. Execute the test with
+#### Test run with Playwright HTML report generation
+
+1. Execute the test
    ```bash
    npx playwright test
    ```
@@ -89,10 +107,13 @@ This repository demonstrates:
   Serving HTML report at http://localhost:9323. Press Ctrl+C to quit.
   ```
 
----
-### Monocart reporter - View test result with the Monocart reporter
+#### Test run with Monocart report generation
 
-1. Generate and view the HTML report when test execution completes - The Report open automatically and generated in [monocart-report/index.html](monocart-report/index.html)
+1. Execute the test
+   ```bash
+   npx playwright test
+   ```
+2. Generate and view the HTML report when test execution completes - The Report open automatically and generated in [monocart-report/index.html](monocart-report/index.html)
    ```bash
    npx monocart show-report monocart-report/index.html
    ```
@@ -103,14 +124,17 @@ This repository demonstrates:
   7/8/2025, 10:26:33 PM server listening on http://localhost:8090/index.html
   ```   
 
----
-### Allure reporter - Generate and view test result with the Allure reporter
+#### Test run with Allure report generation
 
-1. Generate and view the HTML report when test execution completes - Report will be generated in [allure-report/index.html](allure-report/index.html)
+1. Execute the test
+   ```bash
+   npx playwright test
+   ```
+2. Generate and view the HTML report when test execution completes - Report will be generated in [allure-report/index.html](allure-report/index.html)
    ```bash
    allure generate allure-results -o allure-report --clean 
    ```
-2. OR Generate the report and open it automatically on the web server - Report will be generated in [allure-report/index.html](allure-report/index.html)
+3. OR Generate the report and open it automatically on the web server - Report will be generated in [allure-report/index.html](allure-report/index.html)
    ```bash
    allure generate allure-results -o allure-report --clean && allure open allure-report && echo "file://$(pwd)/allure-report/index.html" 
    ```   
