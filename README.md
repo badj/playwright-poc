@@ -6,15 +6,15 @@
 ### Table of contents
 
 
-- [Overview](https://github.com/badj/playwright-poc/edit/main/README.md#overview)
-- [Project information](https://github.com/badj/playwright-poc/edit/main/README.md#project-information)
-- [Pre requisites](https://github.com/badj/playwright-poc/edit/main/README.md#pre-requisites)
-- [Setup](https://github.com/badj/playwright-poc/edit/main/README.md#setup)
-- [Run tests and generate the test run report to view test results](https://github.com/badj/playwright-poc/edit/main/README.md#run-tests-and-generate-the-test-run-report-to-view-the-test-results)
-  - [Test run with Playwright HTML report generation](https://github.com/badj/playwright-poc/edit/main/README.md#test-run-with-playwright-html-report-generation)
-  - [Test run with Monocart report generation](https://github.com/badj/playwright-poc/edit/main/README.md#test-run-with-monocart-report-generation)
-  - [Test run with Allure report generation](https://github.com/badj/playwright-poc/edit/main/README.md#test-run-with-allure-report-generation)
-- [Gotchas](https://github.com/badj/playwright-poc/edit/main/README.md#gotchas)
+- [Overview](https://github.com/badj/playwright-poc/README.md#overview)
+- [Project information](https://github.com/badj/playwright-poc/README.md#project-information)
+- [Pre requisites](https://github.com/badj/playwright-poc/README.md#pre-requisites)
+- [Setup](https://github.com/badj/playwright-poc/README.md#setup)
+- [Run tests and generate the test run report to view test results](https://github.com/badj/playwright-poc/README.md#run-tests-and-generate-the-test-run-report-to-view-the-test-results)
+  - [Test run with Playwright HTML report generation](https://github.com/badj/playwright-poc/README.md#test-run-with-playwright-html-report-generation)
+  - [Test run with Monocart report generation](https://github.com/badj/playwright-poc/README.md#test-run-with-monocart-report-generation)
+  - [Test run with Allure report generation](https://github.com/badj/playwright-poc/README.md#test-run-with-allure-report-generation)
+- [Gotchas](https://github.com/badj/playwright-poc/README.md#gotchas)
 
 ---
 
