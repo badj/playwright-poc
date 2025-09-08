@@ -31,11 +31,11 @@ This repository demonstrates:
    - [![Playwright Tests in Docker](https://github.com/badj/playwright-poc/actions/workflows/main.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/main.yml)
    - [![Playwright Tests with Allure Report](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml) 
     
-   >   - The passing workflow for **"Playwright Tests with Allure Report"**  is a false positive *(failing issues listed below)*, the workflow has been disabled in GitHub Actions until the issue can be resolved!
+   >   - The passing workflow for **"Playwright Tests with Allure Report"**  is currently a false positive *(failing issues listed below)*, the workflow has been disabled in GitHub Actions until the issue can be resolved!
    >   - Current Issues: 
    >     - Workflow runs without error in the workspace, generates the artefact, but it doesn't load the report data objects when the index.html is viewed in the downloaded artefact due to a `blocked by CORS policy` issue. 
    >     - Using the allure command line tool to open and serve the report from the downloaded artefact root is failing as well, and will be investigated at a later stage.
-   >   - TODO:
+   >     - TODO:
    >     - Will be updated at some stage to use GitHub Pages instead to resolve the issue.
 
 ---
