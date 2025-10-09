@@ -15,6 +15,7 @@
   - [Test run with Monocart report generation](#test-run-with-monocart-report-generation)
   - [Test run with Allure report generation](#test-run-with-allure-report-generation)
 - [Gotcha's](#gotchas)
+- [TODO](#todo)
 
 ---
 
@@ -198,3 +199,7 @@ This repository demonstrates:
 ```
 
 ---
+
+### TODO
+
+1. [Bump version for playwright to the latest version 1.56.0](https://github.com/badj/playwright-poc/actions/runs/18366623296/job/52320582883) - Reference similar [**issue**](https://github.com/badj/NZGovDebtTrends2002-2025/issues/12) to resolve from another playwright repo.
