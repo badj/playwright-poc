@@ -1,17 +1,29 @@
 {
   "name": "playwrite-testautomation-poc",
   "version": "1.0.0",
-  "description": "",
+  "description": "> A proof of concept showcasing the implementation of [Playwright](https://playwright.dev/) as a test framework and multiple test reporters *([Monocart](https://github.com/cenfun/monocart-reporter) and [Allure](https://allurereport.org/))* to test the checkout flow for the [\"Test Automation - Big Cartel E-commerce Test store\"](https://testautomation.bigcartel.com/).",
   "main": "index.js",
   "scripts": {},
   "keywords": [],
   "author": "Jacob Badenhorst",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.53.2",
+    "@playwright/test": "^1.56.0",
     "@types/node": "^22.15.3",
     "allure-js-commons": "^3.3.0",
     "allure-playwright": "^3.3.0",
     "monocart-reporter": "^2.9.21"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/badj/playwright-poc.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/badj/playwright-poc/issues"
+  },
+  "homepage": "https://github.com/badj/playwright-poc#readme"
 }
