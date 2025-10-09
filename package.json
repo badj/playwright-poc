@@ -1,7 +1,7 @@
 {
   "name": "playwrite-testautomation-poc",
   "version": "1.0.0",
-  "description": "",
+  "description": "POC showcasing Playwright with Monocart and Allure test reporters for E2E test for the Test Automation - Big Cartel E-commerce Test store",
   "main": "index.js",
   "scripts": {},
   "keywords": [],
