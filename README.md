@@ -102,7 +102,7 @@ This repository demonstrates:
    ```bash
    npx playwright show-report
    ```
-- A hyperlink to the webserver will be printed to the terminal that link through to the generated report - sample output:
+- A hyperlink to the web server will be printed to the terminal that links through to the generated report - sample output:
 
   ```
   Serving HTML report at http://localhost:9323. Press Ctrl+C to quit.
@@ -114,11 +114,11 @@ This repository demonstrates:
    ```bash
    npx playwright test
    ```
-2. Generate and view the HTML report when test execution completes - The Report open automatically and generated in [monocart-report/index.html](monocart-report/index.html)
+2. Generate and view the HTML report when test execution completes - The Report opens automatically and is generated in [monocart-report/index.html](monocart-report/index.html)
    ```bash
    npx monocart show-report monocart-report/index.html
    ```
-- A hyperlink to the webserver will be printed to the terminal that link through to the generated report - sample output:
+- A hyperlink to the web server will be printed to the terminal that links through to the generated report - sample output:
 
   ```
   serve dirs [ 'monocart-report', './' ]
@@ -139,7 +139,7 @@ This repository demonstrates:
    ```bash
    allure generate allure-results -o allure-report --clean && allure open allure-report && echo "file://$(pwd)/allure-report/index.html" 
    ```   
-- A hyperlink to the webserver will be printed to the terminal that link through to the generated report - sample output:
+- A hyperlink to the web server will be printed to the terminal that links through to the generated report - sample output:
 
   ```
   Server started at <http://127.0.0.1:56217>. Press <Ctrl+C> to exit
@@ -177,7 +177,7 @@ This repository demonstrates:
   npm -v
 ```
 
-**Additional steps if steps above steps do not resolvce it:**
+**Additional steps if the steps above do not resolve it:**
 
 6. Clear npm Cache and Reinstall Dependencies → The error may be caused by a corrupted npm cache or incomplete dependency installation
 > This ensures a clean slate for dependency installation, avoiding issues from cached or corrupted files.
