@@ -16,7 +16,7 @@ test.describe('E-commerce Store Automation', () => {
         //const itemPriceWithCurrency= 'NZ$300.00'; //TODO: Test started to fail - investigate!
         const itemPriceWithCurrency= 'NZ$300.00';
         const quantity= '2';
-        const cartTotalPriceWithCurrency= '$600.00';
+        const cartTotalPriceWithCurrency= 'NZ$600.00';
 
         const productLink = page.getByRole('link', { name: productName });
         const productColourSelected = page.getByRole('combobox', { name: 'Select Colours' }).getByText(colourOption);
@@ -81,7 +81,6 @@ test.describe('E-commerce Store Automation', () => {
         await expect(addToCartButton).toBeVisible();
         await expect(addToCartButton).toBeAttached();
         await expect(addToCartButton).toBeEnabled();
-        // await expect(addToCartButton).toHaveText('$600.00 ADD TO CART'); // TODO: fix this - ad to cart button totals not updating during test - remove invalid workaround step below when fixed !
         await expect(addToCartButton).toContainText(itemPriceWithCurrency); // TODO: remove this if above fixed  - add to cart button totals not updating to new amount during test step above - causing failure!
         await addToCartButton.click();
         await page.waitForResponse((response) => response.url().includes('https://testautomation.bigcartel.com/cart.js') && response.status() === 200);
@@ -113,7 +112,7 @@ test.describe('E-commerce Store Automation', () => {
 
         // Assert the cart subtotal is correct
         await expect(cartSubtotalLabel).toHaveText('Subtotal');
-        await expect(subtotalAmount).toHaveText('$600.00');
+        await expect(subtotalAmount).toHaveText('NZ$600.00');
 
         // Test Case 4: Proceed to checkout
         // Add item to cart
