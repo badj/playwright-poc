@@ -23,7 +23,7 @@
 ### Overview
 
 This repository demonstrates: 
- - Playwright Testing Framework to run tests locally. 
+ - The Playwright Testing Framework to run tests locally. 
  - Test run reporting generated with:
    - [Built-in/Default Playwright HTML reporter](https://playwright.dev/docs/test-reporters)
    - [Monocart reporter](https://github.com/cenfun/monocart-reporter)
