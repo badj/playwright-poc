@@ -202,4 +202,5 @@ This repository demonstrates:
 
 ### TODO
 
-1. [Bump version for playwright to the latest version 1.56.0](https://github.com/badj/playwright-poc/actions/runs/18366623296/job/52320582883) - Reference similar [**issue**](https://github.com/badj/NZGovDebtTrends2002-2025/issues/12) to resolve from another playwright repo.
+
+---
