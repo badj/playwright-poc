@@ -45,7 +45,7 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}:/work \
             -w /work \
-            mcr.microsoft.com/playwright:v1.53.2-jammy \
+            mcr.microsoft.com/playwright:v1.56.1-jammy \
             npx playwright test --workers=3
 
       - name: Upload Playwright HTML report
