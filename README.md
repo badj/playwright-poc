@@ -36,8 +36,7 @@ This repository demonstrates:
    >   - Current Issues: 
    >     - Workflow runs without error in the workspace, generates the artefact, but it doesn't load the report data objects when the index.html is viewed in the downloaded artefact due to a `blocked by CORS policy` issue. 
    >     - Using the allure command line tool to open and serve the report from the downloaded artefact root is failing as well, and will be investigated at a later stage.
-   >     - TODO:
-   >     - Will be updated at some stage to use GitHub Pages instead to resolve the issue.
+   >     - TODO: Will be updated at some stage to use GitHub Pages instead to resolve the issue.
 
 ---
 ### Project information
