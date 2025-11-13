@@ -1,6 +1,6 @@
 # Playwright POC
 
-> A proof of concept showcasing the implementation of [Playwright](https://playwright.dev/) as a test framework and multiple test reporters *([Monocart](https://github.com/cenfun/monocart-reporter) and [Allure](https://allurereport.org/))* to test the checkout flow for the ["Test Automation - Big Cartel E-commerce Test store"](https://testautomation.bigcartel.com/).
+> A proof of concept to showcase the implementation of [Playwright](https://playwright.dev/) as a test framework and multiple test reporters *([Monocart](https://github.com/cenfun/monocart-reporter) and [Allure](https://allurereport.org/))* to test the checkout flow for the ["Test Automation - Big Cartel E-commerce Test store"](https://testautomation.bigcartel.com/).
 
 ---
 ### Table of contents
