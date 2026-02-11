@@ -1,0 +1,47 @@
+name: JMeter Performance Tests in Docker
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '30 19 * * *'  # 7:30 am NZT (UTC+12)
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  load-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'  # JMeter compatible
+
+      - name: Download JMeter
+        run: |
+          wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz
+          tar -xzf apache-jmeter-5.6.3.tgz
+          mv apache-jmeter-5.6.3 jmeter
+
+      - name: Run JMeter Performance Tests in Docker
+        run: |
+          ./jmeter/bin/jmeter -n -t performance-tests/load-test.jmx -l results.jtl -e -o dashboard
+
+      - name: Upload JMeter Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: jmeter-results
+          path: |
+            results.jtl
+            dashboard/
+
+      - name: Analyze JMeter Test Results
+        run: |
+          echo "Summary:"
+          cat dashboard/content/js/dashboard.js | grep -oP 'summary = \K\{.*\}'  # Extracts key metrics (response time, errors, etc.)
