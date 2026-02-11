@@ -43,34 +43,94 @@ jobs:
 
       - name: Analyze JMeter Test Results
         run: |
-          echo "Summary:"
-          if [ -f dashboard/content/js/dashboard.js ]; then
-            SUMMARY=$(cat dashboard/content/js/dashboard.js | tr '\n' ' ' | sed 's/  */ /g' | grep -oP 'summary = \K\{[^}]*\}' || true)
-            if [ -n "$SUMMARY" ]; then
-              echo "$SUMMARY"
-            else
-              echo "No summary data found in dashboard (extraction failed; check if multiline or empty)."
-              echo "Checking results.jtl for data..."
-              if [ -f results.jtl ]; then
-                LINE_COUNT=$(wc -l < results.jtl)
-                echo "results.jtl has $LINE_COUNT lines."
-                if [ "$LINE_COUNT" -le 1 ]; then
-                  echo "No test samples executed (only header in results.jtl). Verify load-test.jmx has valid samplers and runs successfully."
-                else
-                  ERROR_COUNT=$(grep -c ',false,' results.jtl || true)
-                  echo "Detected $ERROR_COUNT errors in results."
-                fi
-              else
-                echo "No results file found."
-                exit 1
-              fi
-            fi
-          else
-            echo "Dashboard not generated. Checking results.jtl..."
-            if [ -f results.jtl ]; then
-              wc -l results.jtl
-            else
-              echo "No results file found."
-              exit 1
+          echo "=== JMeter Test Results Analysis ==="
+          echo ""
+          
+          if [ ! -f results.jtl ]; then
+            echo "❌ Error: results.jtl not found!"
+            exit 1
+          fi
+          
+          # Count total samples (excluding header)
+          TOTAL_SAMPLES=$(tail -n +2 results.jtl | wc -l)
+          
+          if [ "$TOTAL_SAMPLES" -eq 0 ]; then
+            echo "❌ No test samples executed. Verify load-test.jmx has valid samplers."
+            exit 1
+          fi
+          
+          echo "📊 Total Samples: $TOTAL_SAMPLES"
+          
+          # Count errors (lines with ",false," in success column)
+          ERROR_COUNT=$(tail -n +2 results.jtl | grep -c ',false,' || true)
+          SUCCESS_COUNT=$((TOTAL_SAMPLES - ERROR_COUNT))
+          SUCCESS_RATE=$(awk "BEGIN {printf \"%.2f\", ($SUCCESS_COUNT/$TOTAL_SAMPLES)*100}")
+          
+          echo "✅ Successful: $SUCCESS_COUNT ($SUCCESS_RATE%)"
+          echo "❌ Failed: $ERROR_COUNT"
+          
+          # Calculate response time statistics (column 2 is elapsed time in ms)
+          echo ""
+          echo "⏱️  Response Time Statistics (ms):"
+          tail -n +2 results.jtl | awk -F',' '{print $2}' | sort -n | awk '
+            BEGIN { min=999999; max=0; sum=0; count=0 }
+            {
+              sum+=$1; 
+              count++; 
+              if($1<min) min=$1; 
+              if($1>max) max=$1;
+              times[count]=$1
+            }
+            END {
+              avg=sum/count;
+              # Calculate median
+              if(count%2==1) median=times[int(count/2)+1];
+              else median=(times[int(count/2)]+times[int(count/2)+1])/2;
+              # Calculate 90th percentile
+              p90_idx=int(count*0.9);
+              p90=times[p90_idx];
+              # Calculate 95th percentile
+              p95_idx=int(count*0.95);
+              p95=times[p95_idx];
+          
+              printf "  Min:     %d ms\n", min;
+              printf "  Average: %.0f ms\n", avg;
+              printf "  Median:  %.0f ms\n", median;
+              printf "  90th %%:  %d ms\n", p90;
+              printf "  95th %%:  %d ms\n", p95;
+              printf "  Max:     %d ms\n", max;
+            }'
+          
+          # Calculate throughput
+          echo ""
+          echo "🚀 Throughput:"
+          START_TIME=$(tail -n +2 results.jtl | head -1 | awk -F',' '{print $1}')
+          END_TIME=$(tail -n +2 results.jtl | tail -1 | awk -F',' '{print $1}')
+          DURATION=$((($END_TIME - $START_TIME) / 1000))
+          
+          if [ "$DURATION" -gt 0 ]; then
+            THROUGHPUT=$(awk "BEGIN {printf \"%.2f\", $TOTAL_SAMPLES/$DURATION}")
+            echo "  Requests/sec: $THROUGHPUT"
+            echo "  Duration: ${DURATION}s"
+          fi
+          
+          # Show error details if any
+          if [ "$ERROR_COUNT" -gt 0 ]; then
+            echo ""
+            echo "⚠️  Error Details:"
+            tail -n +2 results.jtl | grep ',false,' | awk -F',' '{print "  - " $3 ": " $4}' | head -10
+            if [ "$ERROR_COUNT" -gt 10 ]; then
+              echo "  ... and $((ERROR_COUNT - 10)) more errors"
             fi
           fi
+          
+          # Check if dashboard was generated
+          echo ""
+          if [ -d dashboard ]; then
+            echo "📈 HTML Dashboard generated at: dashboard/index.html"
+          else
+            echo "⚠️  Dashboard directory not found"
+          fi
+          
+          echo ""
+          echo "=== Analysis Complete ==="
