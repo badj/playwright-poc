@@ -43,36 +43,36 @@ jobs:
 
       - name: Analyze JMeter Test Results
         run: |
-         echo "Summary:"
-         if [ -f dashboard/content/js/dashboard.js ]; then
-#         Collapse newlines to spaces, clean up extra spaces, and extract the summary object
-         SUMMARY=$(cat dashboard/content/js/dashboard.js | tr '\n' ' ' | sed 's/  */ /g' | grep -oP 'summary = \K\{[^}]*\}')
-         if [ -n "$SUMMARY" ]; then
-          echo "$SUMMARY"
+          echo "Summary:"
+          if [ -f dashboard/content/js/dashboard.js ]; then
+#             Collapse newlines to spaces, clean up extra spaces, and extract the summary object
+            SUMMARY=$(cat dashboard/content/js/dashboard.js | tr '\n' ' ' | sed 's/  */ /g' | grep -oP 'summary = \K\{[^}]*\}')
+            if [ -n "$SUMMARY" ]; then
+              echo "$SUMMARY"
+            else
+              echo "No summary data found in dashboard (extraction failed; check if multiline or empty)."
+              echo "Checking results.jtl for data..."
+              if [ -f results.jtl ]; then
+                LINE_COUNT=$(wc -l < results.jtl)
+                echo "results.jtl has $LINE_COUNT lines."
+                if [ "$LINE_COUNT" -le 1 ]; then
+                  echo "No test samples executed (only header in results.jtl). Verify load-test.jmx has valid samplers and runs successfully."
+                else
+#                   Optionally extract basic metrics from results.jtl (e.g., error count)
+                  ERROR_COUNT=$(grep -c ',false,' results.jtl)
+                  echo "Detected $ERROR_COUNT errors in results."
+                fi
+              else
+                echo "No results file found."
+                exit 1
+              fi
+            fi
           else
-          echo "No summary data found in dashboard (extraction failed; check if multiline or empty)."
-          echo "Checking results.jtl for data..."
-          if [ -f results.jtl ]; then
-          LINE_COUNT=$(wc -l < results.jtl)
-          echo "results.jtl has $LINE_COUNT lines."
-          if [ "$LINE_COUNT" -le 1 ]; then
-          echo "No test samples executed (only header in results.jtl). Verify load-test.jmx has valid samplers and runs successfully."
-          else
-#          Extract basic metrics from results.jtl (e.g., error count)
-          ERROR_COUNT=$(grep -c ',false,' results.jtl)
-               echo "Detected $ERROR_COUNT errors in results."
-               fi
-               else
-               echo "No results file found."
-               exit 1
-               fi
-               fi
-               else
-               echo "Dashboard not generated. Checking results.jtl..."
-               if [ -f results.jtl ]; then
-               wc -l results.jtl
-               else
-               echo "No results file found."
-               exit 1
-               fi
-               fi
+            echo "Dashboard not generated. Checking results.jtl..."
+            if [ -f results.jtl ]; then
+              wc -l results.jtl
+            else
+              echo "No results file found."
+              exit 1
+            fi
+          fi
