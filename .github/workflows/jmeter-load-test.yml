@@ -45,7 +45,7 @@ jobs:
         run: |
           echo "Summary:"
           if [ -f dashboard/content/js/dashboard.js ]; then
-            SUMMARY=$(cat dashboard/content/js/dashboard.js | tr '\n' ' ' | sed 's/  */ /g' | grep -oP 'summary = \K\{[^}]*\}')
+            SUMMARY=$(cat dashboard/content/js/dashboard.js | tr '\n' ' ' | sed 's/  */ /g' | grep -oP 'summary = \K\{[^}]*\}' || true)
             if [ -n "$SUMMARY" ]; then
               echo "$SUMMARY"
             else
@@ -57,7 +57,7 @@ jobs:
                 if [ "$LINE_COUNT" -le 1 ]; then
                   echo "No test samples executed (only header in results.jtl). Verify load-test.jmx has valid samplers and runs successfully."
                 else
-                  ERROR_COUNT=$(grep -c ',false,' results.jtl)
+                  ERROR_COUNT=$(grep -c ',false,' results.jtl || true)
                   echo "Detected $ERROR_COUNT errors in results."
                 fi
               else
