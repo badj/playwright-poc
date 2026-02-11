@@ -41,7 +41,24 @@ jobs:
             results.jtl
             dashboard/
 
+#      - name: Analyze JMeter Test Results
+#        run: |
+#          echo "Summary:"
+#          cat dashboard/content/js/dashboard.js | grep -oP 'summary = \K\{.*\}'  # Extracts key metrics (response time, errors, etc.)
+
       - name: Analyze JMeter Test Results
         run: |
           echo "Summary:"
-          cat dashboard/content/js/dashboard.js | grep -oP 'summary = \K\{.*\}'  # Extracts key metrics (response time, errors, etc.)
+          if [ -f dashboard/content/js/dashboard.js ]; then
+          cat dashboard/content/js/dashboard.js | grep -oP 'summary = \K\{.*\}' || echo "No summary data found in dashboard"
+          else
+          echo "Dashboard not generated. Checking results.jtl..."
+          if [ -f results.jtl ]; then
+          wc -l results.jtl
+          else
+          echo "No results file found"
+          exit 1
+          fi
+          fi          
+
+          
