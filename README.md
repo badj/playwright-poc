@@ -228,7 +228,7 @@ This repository demonstrates:
 
 #### 2. Test Steps disabled due to Cloudflare security check triggered
 
-![Cloudflare-security-check-issue.png](images/Cloudflare-security-check-issue.png)
+![cloudflare-security-check-issue.png](images/cloudflare-security-check-issue.png)
 
 > Test Case 4: Proceed to checkout.
 > Test steps disabled due to Cloudflare security check triggered on checkout payments page load for CI / Docker / GitHub action runs - issue started on 18 February 2026! 
