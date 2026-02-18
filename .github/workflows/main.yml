@@ -48,6 +48,14 @@ jobs:
             -w /work \
             mcr.microsoft.com/playwright:v1.56.1-jammy \
             npx playwright test --workers=3
+# Testing fix - action runner hanging due to falling tests to report in the Monocart reporter
+      - name: Upload Monocart report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: monocart-report
+          path: monocart-report/
+          retention-days: 14
 
       - name: Upload Playwright HTML report
         if: always()
