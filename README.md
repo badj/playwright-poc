@@ -16,6 +16,8 @@
   - [Test run with Allure report generation](#test-run-with-allure-report-generation)
   - [JMeter Load Test Integration to measure performance](#jmeter-load-test-integration-to-measure-performance) 
 - [Gotcha's](#gotchas)
+  - [1 - Installing Playwright failing due to an unsupported Node.js version](#1-installing-playwright-failing-due-to-an-unsupported-nodejs-version)
+  - [2 - Test Steps disabled due to Cloudflare security check triggered](#2-test-steps-disabled-due-to-cloudflare-security-check-triggered)
 - [TODO](#todo)
 
 ---
@@ -228,10 +230,8 @@ This repository demonstrates:
 
 #### 2. Test Steps disabled due to Cloudflare security check triggered
 
-![cloudflare-security-check-issue.png](images/cloudflare-security-check-issue.png)
-
 > Test Case 4: Proceed to checkout.
-> Test steps disabled due to Cloudflare security check triggered on checkout payments page load for CI / Docker / GitHub action runs - issue started on 18 February 2026! 
+> Test steps disabled due to Cloudflare security check triggered on checkout payments page load for CI / Docker / GitHub action runs - issue started on 18 February 2026!
 
 ```javascript
 // Step added to deal with Cloudflare security check issue - Disable this step for local runs if test step below are enabled!
@@ -242,6 +242,8 @@ expect(currentUrl).toContain('checkout');
 // await expect(page).toHaveTitle('Payment Gateway Required (402)')
 // await expect(checkoutPaymentsNotConfigured).toHaveText('We’re not set up to take payments.');
 ```
+
+![cloudflare-security-check-issue.png](images/cloudflare-security-check-issue.png)
 
 ---
 
