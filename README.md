@@ -176,8 +176,9 @@ This repository demonstrates:
 
 ### Gotcha's
 
-**1. Installing Playwright using `npm i -D @playwright/test` failing due to an unsupported Node.js version**
+#### 1. Installing Playwright failing due to an unsupported Node.js version
 
+> Installing Playwright using `npm i -D @playwright/test` failing due to an unsupported Node.js version.
 > Your current Node.js version is older than the recommended LTS version.
 > Playwright requires a more recent version of Node.js. As of Playwright v1.54.1, the minimum supported Node.js version is typically Node.js 16 or higher.
 
@@ -223,6 +224,23 @@ This repository demonstrates:
 9. Reinstall dependencies:
 ```bash
   npm install
+```
+
+#### 2. Test Steps disabled due to Cloudflare security check triggered
+
+![Cloudflare-security-check-issue.png](images/Cloudflare-security-check-issue.png)
+
+> Test Case 4: Proceed to checkout.
+> Test steps disabled due to Cloudflare security check triggered on checkout payments page load for CI / Docker / GitHub action runs - issue started on 18 February 2026! 
+
+```javascript
+// Step added to deal with Cloudflare security check issue - Disable this step for local runs if test step below are enabled!
+expect(currentUrl).toContain('checkout'); 
+// TODO: Steps disabled due to Cloudflare security check triggered on checkout payments page load for Docker / GitHub action runs - issue started on 18 February 2026!
+// expect(currentUrl).toContain('/checkout/');
+// await expect(page).toHaveURL(/^https:\/\/testautomation\.bigcartel\.com\/checkout(\/[A-Z0-9]+)?$/);
+// await expect(page).toHaveTitle('Payment Gateway Required (402)')
+// await expect(checkoutPaymentsNotConfigured).toHaveText('We’re not set up to take payments.');
 ```
 
 ---
