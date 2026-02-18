@@ -27,7 +27,7 @@ export default defineConfig({
   // Reporter to use. See https://playwright.dev/docs/test-reporters
   reporter: [
       // Serve HTML report command 'npx playwright show-report'
-      ['html'],
+      ['html', { open: 'never' }],
       // Default line reporter for console output
       ['line'],
       // Allure reporter: Generate and clean command 'allure generate allure-results -o allure-report --clean'
