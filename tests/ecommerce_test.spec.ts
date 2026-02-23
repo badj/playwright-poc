@@ -13,7 +13,6 @@ test.describe('E-commerce Store Automation', () => {
         const productName = 'Light Spotted Tabby Cat'
         const colourOption = 'Colour: Grey';
         const ageOption = 'Age: 5YRS';
-        //const itemPriceWithCurrency= 'NZ$300.00'; //TODO: Test started to fail - investigate!
         const itemPriceWithCurrency= 'NZ$300.00';
         const quantity= '2';
         const cartTotalPriceWithCurrency= 'NZ$600.00';
@@ -126,10 +125,13 @@ test.describe('E-commerce Store Automation', () => {
         // // Disabled - a session id is now appended to the checkout URL and it caused test to fail
         // // await expect(page).toHaveURL('https://testautomation.bigcartel.com/checkout');
         expect(currentUrl).toContain('checkout'); // Step added to deal with Cloudflare security check issue - Disable this step for local runs if test step below are enabled!
-        // TODO: Steps disabled due to Cloudflare security check triggered on checkout payments page load for Docker / GitHub action runs - issue started on 18 February 2026!
-        // expect(currentUrl).toContain('/checkout/');
-        // await expect(page).toHaveURL(/^https:\/\/testautomation\.bigcartel\.com\/checkout(\/[A-Z0-9]+)?$/);
-        // await expect(page).toHaveTitle('Payment Gateway Required (402)')
-        // await expect(checkoutPaymentsNotConfigured).toHaveText('We’re not set up to take payments.');
+        // TODO: Steps was disabled due to Cloudflare security check triggered on checkout payments page load for Docker / GitHub action runs - issue started on 18 February 2026!
+        // TODO: Updated scheduler for jmeter tests to run after the playwright tests to test if it will resolve the Cloudflare security check that I suspect is initially triggered by jmeter tests resulting in Playwright tests also failing due to it when test run on the same / closely scheduled times
+        // TODO: Disable all steps below again if Cloudflare security check is triggered on cart and checkout pages again !
+        // TODO: Update the readme Gotcha section when the issue is resolved!
+        expect(currentUrl).toContain('/checkout/');
+        await expect(page).toHaveURL(/^https:\/\/testautomation\.bigcartel\.com\/checkout(\/[A-Z0-9]+)?$/);
+        await expect(page).toHaveTitle('Payment Gateway Required (402)')
+        await expect(checkoutPaymentsNotConfigured).toHaveText('We’re not set up to take payments.');
     });
 });
