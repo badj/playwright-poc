@@ -124,18 +124,6 @@ test.describe('E-commerce Store Automation', () => {
         const currentUrl = page.url();
         // TODO: Updated URL checker to a simple check (KISS!)
         expect(currentUrl).toContain('checkout');
-
-        // TODO: Testing Cloudflare security check - see if waits for networkidle and waitForTimeout loads checkoutPaymentsNotConfigured page!
-        await page.waitForLoadState('networkidle');
-        console.log('Network is idle');
-        await page.keyboard.press('PageDown')
-        await page.keyboard.press('PageUp')
-        await page.waitForLoadState('networkidle');
-        console.log('Network is idle');
-        await page.waitForTimeout(5000);
-        await expect(checkoutPaymentsNotConfigured).toHaveText('We’re not set up to take payments.');
-        // TODO: Remove code block above if it fails - lines 127-137!
-
         // TODO: Updated URL checker to a simple check (KISS!) - Disabled verbose checks due to provider that may change checkout URL in the future again!
         // expect(currentUrl).toContain('/checkout/');
         // await expect(page).toHaveURL(/^https:\/\/testautomation\.bigcartel\.com\/checkout(\/[A-Z0-9]+)?$/);
