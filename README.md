@@ -18,6 +18,7 @@
 - [Gotcha's](#gotchas)
   - [1 - Installing Playwright failing due to an unsupported Node.js version](#1-installing-playwright-failing-due-to-an-unsupported-nodejs-version)
 - [TODO](#todo)
+  - [1. Update tests with if else conditions for the checkout page flow](#1-update-tests-with-if-else-conditions-for-the-checkout-page-flow-)
 
 ---
 
@@ -40,6 +41,8 @@ This repository demonstrates:
    >     - TODO: Will be updated at some stage to use GitHub Pages instead to resolve the issue.
    - [![JMeter Performance Tests in Docker](https://github.com/badj/playwright-poc/actions/workflows/jmeter-load-test.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/jmeter-load-test.yml)
 
+[_⇡ Return to the Table of Contents_](#table-of-contents)
+
 ---
 ### Project information
 
@@ -56,12 +59,15 @@ This repository demonstrates:
     - Quantities.
     - Item prices and cart totals.
 
+[_⇡ Return to the Table of Contents_](#table-of-contents)
+
 ---
 ### Pre-requisites
 
 1. [Node.js](https://nodejs.org/en/download/) (LTS version recommended)
 2. [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm/) (Included with Node.js)
 
+[_⇡ Return to the Table of Contents_](#table-of-contents)
 
 ---
 ### Setup
@@ -86,6 +92,8 @@ This repository demonstrates:
    npx playwright install
    ``` 
 
+[_⇡ Return to the Table of Contents_](#table-of-contents)
+
 ---
 ### Run tests and generate the test run report to view the test results
 
@@ -109,6 +117,8 @@ This repository demonstrates:
   Serving HTML report at http://localhost:9323. Press Ctrl+C to quit.
   ```
 
+[_⇡ Return to the Table of Contents_](#table-of-contents)
+
 #### Test run with Monocart report generation
 
 1. Execute the test
@@ -125,6 +135,8 @@ This repository demonstrates:
   serve dirs [ 'monocart-report', './' ]
   7/8/2025, 10:26:33 PM server listening on http://localhost:8090/index.html
   ```   
+
+[_⇡ Return to the Table of Contents_](#table-of-contents)
 
 #### Test run with Allure report generation
 
@@ -145,6 +157,7 @@ This repository demonstrates:
   ```
   Server started at <http://127.0.0.1:56217>. Press <Ctrl+C> to exit
   ```
+[_⇡ Return to the Table of Contents_](#table-of-contents)
 
 #### JMeter load test integration to measure performance
 
@@ -173,6 +186,8 @@ This repository demonstrates:
   - Unzip it and run bin/jmeter.bat (Windows) or bin/jmeter (macOS/Linux). 
   - Open the JMeter GUI and load the test plan from [performance-tests/load-test.jmx](performance-tests/load-test.jmx). 
   - ⚠️ Keep thread group configurations set to the original low values to reduce the impact of the load test on the e-commerce store to prevent Cloudflare new request throttling!
+
+[_⇡ Return to the Table of Contents_](#table-of-contents)
 
 ---
 
@@ -228,9 +243,17 @@ This repository demonstrates:
   npm install
 ```
 
+[_⇡ Return to the Table of Contents_](#table-of-contents)
+
 ---
 
 ### TODO
 
+#### 1. Update tests with if else conditions for the checkout page flow 
+
+- Update tests with if else conditions on the checkout page / flow to handle Cloudflare security check triggers that can occur during test execution and cause tests to fail.
+- If the Cloudflare security check is triggered, the test will attempt to click the checkbox to continue ro the checkout page to complete the workflow without failure.
+
+[_⇡ Return to the Table of Contents_](#table-of-contents)
 
 ---
