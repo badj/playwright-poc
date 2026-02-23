@@ -151,7 +151,7 @@ This repository demonstrates:
 - [A JMeter load tests integration workflow has been integrated to measure site performance](.github/workflows/jmeter-load-test.yml)
 - The Jmeter load tests are located in the [performance-tests](performance-tests) directory in [performance-tests/load-test.jmx](performance-tests/load-test.jmx):
 > ⚠️ Thread Group configurations were set to low values to reduce the impact of the load test on the e-commerce store where Cloudflare could potentially throttle the requests!
-  - Thread Group configurations for the tests:
+  - **Thread Group configurations for the tests:**
     - Thread Group number of threads: 3
     - Thread Group ramp time: 10 seconds
     - Thread Group same user on next iteration: true
@@ -159,15 +159,15 @@ This repository demonstrates:
     - Loop Controller loops: 1
     - Loop Controller continue forever: false
     - ⚠️ Keep thread group configurations set to the original low values to reduce the impact of the load test on the e-commerce store to prevent Cloudflare new request throttling!
-- The workflow: 
+- **The workflow:** 
   - Runs daily at 7:30 AM NZT (cron in UTC: 19:30 previous day). 
-  - on push and pull_request to branches "main" disabled (⚠️ Caused Cloudflare security check issues that made the Playwright tests fail - keep disabled!)
+  - "on push and pull_request" to branches "main" disabled (⚠️ Caused Cloudflare security check issues that made the Playwright tests fail - keep disabled!)
   - Installs JMeter. 
   - Executes the JMeter load tests against the ["Test Automation - Big Cartel E-commerce Test store"](https://testautomation.bigcartel.com/) Landing page, Products page and Cart page.
   - Jmeter tests Generate a dashboard (HTML report) and .jtl results. 
   - Uploads artifacts for review (view in GitHub Actions UI). 
   - Prints a summary for quick analysis (e.g., avg response time, error rate).
-- ⚠️ Run the JMeter tests locally:
+- ⚠️ **Run the JMeter tests locally:**
   - [Download and install Java 8+ installed (JMeter requires it) from Oracle Downloads](https://www.oracle.com/java/technologies/downloads/)
   - [Download and install Apache JMeter (latest version) from JMeter Apache](https://jmeter.apache.org/download_jmeter.cgi)
   - Unzip it and run bin/jmeter.bat (Windows) or bin/jmeter (macOS/Linux). 
