@@ -249,10 +249,16 @@ This repository demonstrates:
 
 ### TODO
 
-#### 1. Update tests with if else conditions for the checkout page flow 
+<details>
+  <summary>1. Update tests with if else conditions for the checkout page flow</summary>
 
-- Update tests with if else conditions on the checkout page / flow to handle Cloudflare security check triggers that can occur during test execution and cause tests to fail.
-- If the Cloudflare security check is triggered, the test will attempt to click the checkbox to continue ro the checkout page to complete the workflow without failure.
+- Update tests with if else conditions on the checkout page / flow to handle the normal "Payment Gateway Required" page or the Cloudflare security check page that occur during test execution.
+- Test is currently asserting that the URL contains 'checkout' for a pass. 
+- Cloudflare security check example:
+
+![cloudflare-security-check.png](images/cloudflare-security-check.png)
+
+</details>
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
