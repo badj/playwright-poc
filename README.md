@@ -17,7 +17,6 @@
   - [JMeter Load Test Integration to measure performance](#jmeter-load-test-integration-to-measure-performance) 
 - [Gotcha's](#gotchas)
   - [1 - Installing Playwright failing due to an unsupported Node.js version](#1-installing-playwright-failing-due-to-an-unsupported-nodejs-version)
-  - [2 - Test Steps disabled due to Cloudflare security check triggered](#2-test-steps-disabled-due-to-cloudflare-security-check-triggered)
 - [TODO](#todo)
 
 ---
@@ -162,6 +161,7 @@ This repository demonstrates:
     - ⚠️ Keep thread group configurations set to the original low values to reduce the impact of the load test on the e-commerce store to prevent Cloudflare new request throttling!
 - The workflow: 
   - Runs daily at 7:30 AM NZT (cron in UTC: 19:30 previous day). 
+  - on push and pull_request to branches "main" disabled (⚠️ Caused Cloudflare security check issues that made the Playwright tests fail - keep disabled!)
   - Installs JMeter. 
   - Executes the JMeter load tests against the ["Test Automation - Big Cartel E-commerce Test store"](https://testautomation.bigcartel.com/) Landing page, Products page and Cart page.
   - Jmeter tests Generate a dashboard (HTML report) and .jtl results. 
@@ -227,23 +227,6 @@ This repository demonstrates:
 ```bash
   npm install
 ```
-
-#### 2. Test Steps disabled due to Cloudflare security check triggered
-
-> Test Case 4: Proceed to checkout.
-> Test steps disabled due to Cloudflare security check triggered on checkout payments page load for CI / Docker / GitHub action runs - issue started on 18 February 2026!
-
-```javascript
-// Step added to deal with Cloudflare security check issue - Disable this step for local runs if test step below are enabled!
-expect(currentUrl).toContain('checkout'); 
-// TODO: Steps disabled due to Cloudflare security check triggered on checkout payments page load for Docker / GitHub action runs - issue started on 18 February 2026!
-// expect(currentUrl).toContain('/checkout/');
-// await expect(page).toHaveURL(/^https:\/\/testautomation\.bigcartel\.com\/checkout(\/[A-Z0-9]+)?$/);
-// await expect(page).toHaveTitle('Payment Gateway Required (402)')
-// await expect(checkoutPaymentsNotConfigured).toHaveText('We’re not set up to take payments.');
-```
-
-![cloudflare-security-check-issue.png](images/cloudflare-security-check-issue.png)
 
 ---
 
