@@ -18,7 +18,7 @@
 - [Gotcha's](#gotchas)
   - [1 - Installing Playwright failing due to an unsupported Node.js version](#1-installing-playwright-failing-due-to-an-unsupported-nodejs-version)
 - [TODO](#todo)
-  - [1. Update tests with if else conditions for the checkout page flow](#1-update-tests-with-if-else-conditions-for-the-checkout-page-flow-)
+  - [1 - Update tests with if else conditions for the checkout page flow](#1-update-tests-with-if-else-conditions-for-the-checkout-page-flow)
 
 ---
 
@@ -249,16 +249,13 @@ This repository demonstrates:
 
 ### TODO
 
-<details>
-  <summary>1. Update tests with if else conditions for the checkout page flow</summary>
-
+#### 1. Update tests with if else conditions for the checkout page flow
 - Update tests with if else conditions on the checkout page / flow to handle the normal "Payment Gateway Required" page or the Cloudflare security check page that occur during test execution.
 - Test is currently asserting that the URL contains 'checkout' for a pass. 
 - Cloudflare security check example:
 
 ![cloudflare-security-check.png](images/cloudflare-security-check.png)
 
-</details>
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
