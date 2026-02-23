@@ -58,11 +58,10 @@ export default defineConfig({
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
-// TODO: Disabled webkit cross-browser runner support due to Cloudflare security checks triggered on the cart and checkout pages
-    // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
-    // },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
 
     // Test against mobile viewports
     // {
