@@ -1,6 +1,7 @@
 name: JMeter Performance Tests in Docker
 
 on:
+#  Disabled due to Cloudflare security checks triggered on the checkout page for Playwright tests due to Jmeter load test runner
 #  push:
 #    branches: [main]
 #  pull_request:
