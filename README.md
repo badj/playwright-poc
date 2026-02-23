@@ -173,7 +173,7 @@ This repository demonstrates:
     - Loop Controller continue forever: false
     - ⚠️ Keep thread group configurations set to the original low values to reduce the impact of the load test on the e-commerce store to prevent Cloudflare new request throttling!
 - **The workflow:** 
-  - Runs daily at 7:30 AM NZT (cron in UTC: 19:30 previous day). 
+  - Runs daily at 10:30 am NZT (UTC+12). 
   - "on push and pull_request" to branches "main" disabled (⚠️ Caused Cloudflare security check issues that made the Playwright tests fail - keep disabled!)
   - Installs JMeter. 
   - Executes the JMeter load tests against the ["Test Automation - Big Cartel E-commerce Test store"](https://testautomation.bigcartel.com/) Landing page, Products page and Cart page.
