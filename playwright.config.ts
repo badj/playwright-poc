@@ -54,12 +54,11 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-// TODO: Disabled cross-browser runners due to Cloudflare security checks triggered on the cart and checkout pages
-    // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
-    //
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+// TODO: Disabled webkit cross-browser runner support due to Cloudflare security checks triggered on the cart and checkout pages
     // {
     //   name: 'webkit',
     //   use: { ...devices['Desktop Safari'] },
