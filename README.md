@@ -16,9 +16,11 @@
   - [Test run with Allure report generation](#test-run-with-allure-report-generation)
   - [JMeter Load Test Integration to measure performance](#jmeter-load-test-integration-to-measure-performance) 
 - [Gotcha's](#gotchas)
-  - [1 - Installing Playwright failing due to an unsupported Node.js version](#1-installing-playwright-failing-due-to-an-unsupported-nodejs-version)
-- [TODO](#todo)
-  - [1 - Update tests with if else conditions for the checkout page flow](#1-update-tests-with-if-else-conditions-for-the-checkout-page-flow)
+  - [1 - Installing Playwright failing due to an unsupported Node.js version](#1-installing-playwright-failed-due-to-an-unsupported-nodejs-version)
+- [TODO / Current Issues](#todo--current-issues)
+  - [1. Tests falling](#1-tests-falling-)
+    - [1.1. Tests failing to add items to cart - Cloudflare security check causing failure](#11-tests-failing-to-add-items-to-cart---cloudflare-security-check-causing-failure)
+    - [1.2. Tests failing to progres to the checkout page - Cloudflare security check causing failure](#12-tests-failing-to-progres-to-the-checkout-page---cloudflare-security-check-causing-failure)
 
 ---
 
@@ -34,10 +36,10 @@ This repository demonstrates:
  - CI/CD Integration for [GitHub workflow support](https://github.com/badj/playwright-poc/actions) executing tests in [Docker](https://www.docker.com/) with GitHub Actions triggered on push/pull requests to main and for daily scheduled runs:
    - [![Playwright Tests in Docker](https://github.com/badj/playwright-poc/actions/workflows/main.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/main.yml)
    - [![Playwright Tests with Allure Report](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml)
-   >   - The passing workflow for **"Playwright Tests with Allure Report"**  is currently a false positive *(failing issues listed below)*, the workflow has been disabled in GitHub Actions until the issue can be resolved!
+   >   - The passing workflow for **"Playwright Tests with Allure Report"** is currently a false positive *(failing issues listed below)*, the workflow has been disabled in GitHub Actions until the issue can be resolved!
    >   - Current Issues: 
    >     - Workflow runs without error in the workspace, generates the artefact, but it doesn't load the report data objects when the index.html is viewed in the downloaded artefact due to a `blocked by CORS policy` issue. 
-   >     - Using the allure command line tool to open and serve the report from the downloaded artefact root is failing as well, and will be investigated at a later stage.
+   >     - Using the allure command line tool to open and serve the report from the downloaded artefact root is failing as well and will be investigated at a later stage.
    >     - TODO: Will be updated at some stage to use GitHub Pages instead to resolve the issue.
    - [![JMeter Performance Tests in Docker](https://github.com/badj/playwright-poc/actions/workflows/jmeter-load-test.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/jmeter-load-test.yml)
 
@@ -193,7 +195,7 @@ This repository demonstrates:
 
 ### Gotcha's
 
-#### 1. Installing Playwright failing due to an unsupported Node.js version
+#### 1. Installing Playwright failed due to an unsupported Node.js version
 
 > Installing Playwright using `npm i -D @playwright/test` failing due to an unsupported Node.js version.
 > Your current Node.js version is older than the recommended LTS version.
@@ -247,15 +249,58 @@ This repository demonstrates:
 
 ---
 
-### TODO
+### TODO / Current Issues
 
-#### 1. Update tests with if else conditions for the checkout page flow
-- Update tests with if else conditions on the checkout page / flow to handle the normal "Payment Gateway Required" page or the Cloudflare security check page that occur during test execution.
-- Test is currently asserting that the URL contains 'checkout' for a pass. 
-- Cloudflare security check example:
+#### 1. Tests falling: 
+
+#### 1.1. Tests failing to add items to cart - Cloudflare security check causing failure
+
+<details>
+  <summary>Details</summary>
+
+> - This issue started on 03 March 2026.
+> - When items are added to the cart from the product page, the page.request.post to https://testautomation.bigcartel.com/cart.js returns a 403 error, and the test remains stuck on the product page - refer to the API response and Cloudflare HTML response samples below.
+> - Won't be able to address this issue as there is no reliable workaround for the Cloudflare security check triggered.
+> - This is affecting local test runs and the GitHub workflow runs.
+>   - The issue was not happening during local runs up until 03 March 2026. 
+>   - Failing test steps have been updated to now assert for the 403 response, and original test steps have been commented out with comments noting the issue.
+
+**Playwright test failure error reported in logs:**
+
+```javascript
+    Test timeout of 30000ms exceeded.
+    @ecommerce_test.spec.ts:85
+    Error: page.waitForResponse: Test timeout of 30000ms exceeded.
+```
+
+**API - Cloudflare - 403 Response sample:**
+
+![add-to-cart-CF-403.jpeg](images/add-to-cart-CF-403.jpeg)
+
+**API - Cloudflare - HTML response sample:**
+
+![add-to-cart-CF-403-response-html.jpeg](images/add-to-cart-CF-403-response-html.jpeg)
+
+</details>
+
+[_⇡ Return to the Table of Contents_](#table-of-contents)
+
+#### 1.2. Tests failing to progres to the checkout page - Cloudflare security check causing failure
+<details>
+  <summary>Details</summary>
+
+> - This issue started on 18 February 2026.
+> - Checkout journey from the cart page to the checkout / payments page fails with a Cloudflare security check page - refer to the Cloudflare security check page sample below.
+> - Won't be able to address this issue as there is no reliable workaround for the Cloudflare security check triggered.
+> - This is affecting local test runs and the GitHub workflow runs.
+>   - The issue was not happening during local runs up until 03 March 2026.
+>   - Failing test steps have been disabled / commented out with comments noting the issue.
+
+**Cloudflare security check sample:**
 
 ![cloudflare-security-check.png](images/cloudflare-security-check.png)
 
+</details>
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
