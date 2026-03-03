@@ -285,6 +285,8 @@ This repository demonstrates:
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
+---
+
 #### 1.2. Tests failing to progres to the checkout page - Cloudflare security check causing failure
 <details>
   <summary>Details</summary>
