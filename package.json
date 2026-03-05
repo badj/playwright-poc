@@ -13,5 +13,9 @@
     "allure-js-commons": "^3.3.0",
     "allure-playwright": "^3.3.0",
     "monocart-reporter": "^2.9.21"
+  },
+  "dependencies": {
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
   }
 }
