@@ -41,24 +41,6 @@ jobs:
 #        env:
 #          CI: true
 
-#      TODO: Cleanup - Remove this step if new steps "Install Playwright browsers" and "Run Playwright tests (headed)" worked!
-#      - name: Run Playwright tests in Docker
-#        run: |
-#          docker run --rm \
-#            -v ${{ github.workspace }}:/work \
-#            -w /work \
-#            mcr.microsoft.com/playwright:v1.56.1-jammy \
-#            npx playwright test --workers=3
-
-#      TODO: Cleanup - Remove this step if new steps "Install Playwright browsers" and "Run Playwright tests (headed)" worked!
-#      - name: Run Playwright tests (headed via virtual display)
-#        run: |
-#          docker run --rm \
-#            -v ${{ github.workspace }}:/work \
-#            -w /work \
-#            mcr.microsoft.com/playwright:v1.56.1-jammy \
-#            xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" npx playwright test
-
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
