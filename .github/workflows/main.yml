@@ -41,14 +41,23 @@ jobs:
 #        env:
 #          CI: true
 
-      - name: Run Playwright tests in Docker
+#      TODO: Remove this step if new step "Run Playwright tests (headed via virtual display)" worked!
+#      - name: Run Playwright tests in Docker
+#        run: |
+#          docker run --rm \
+#            -v ${{ github.workspace }}:/work \
+#            -w /work \
+#            mcr.microsoft.com/playwright:v1.56.1-jammy \
+#            npx playwright test --workers=3
+
+      - name: Run Playwright tests (headed via virtual display)
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/work \
             -w /work \
             mcr.microsoft.com/playwright:v1.56.1-jammy \
-            npx playwright test --workers=3
-# Testing fix - action runner hanging due to falling tests to report in the Monocart reporter
+            xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" npx playwright test 
+
       - name: Upload Monocart report artifact
         if: always()
         uses: actions/upload-artifact@v4
