@@ -1,7 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 import * as os from "node:os";
-import * as fs from 'fs';
-const storageStatePath = 'playwright/.auth/cloudflare.json';
+
+/****************************************************
+ * See https://playwright.dev/docs/test-configuration.
+ * ****************************************************/
 
 export default defineConfig({
     testDir: './tests',
@@ -32,79 +34,60 @@ export default defineConfig({
         trace: 'on',
         // trace: 'retain-on-failure',
         // trace: 'on-first-retry',
-        headless: false,
-        locale: 'en-NZ',
-        timezoneId: 'Pacific/Auckland',
-        storageState: fs.existsSync(storageStatePath) ? storageStatePath : undefined
+        headless: false,  // Keep this temporarily for debugging (run with --headed)
     },
 
+    /*********************************************************************************************************************************
+     * Cloudflare security check triggered for Chrome bypassed - issue has been fixed
+     * Bypassing Cloudflare security check - hack as per BrowserStack article:
+     * https://www.browserstack.com/guide/playwright-cloudflare with stealth evasions (including userAgentData for sec-ch-ua on POSTs)
+     * TODO: Cloudflare security check bypass for Firefox - fix still being investigated/WIP!
+     * *********************************************************************************************************************************/
+
     projects: [
-
-        /***************************************************************************************************************
-         * Cloudflare warmup step
-         * Saves cf_clearance cookie
-         * Required to spoof Cloudflare security checks for: "Add to cart" AJAX/XHR POST that gets blocked
-         * Required to spoof Cloudflare security turnstiles loaded for Cart and Checkout pages
-         **************************************************************************************************************/
-
-        {
-            name: 'setup',
-            testMatch: /cloudflare.setup.ts/,
-        },
-
-        /***************************************************************************************************************
-         * CHROME (Cloudflare hardened)
-         * userAgent and launchOptions required to spoof Cloudflare security checks for:
-         * "Add to cart" AJAX/XHR POST that gets blocked by Cloudflare and turnstiles loaded for Cart and Checkout pages
-         **************************************************************************************************************/
-
         {
             name: 'chromium',
-            dependencies: ['setup'],
             use: {
                 ...devices['Desktop Chrome'],
-
-                userAgent:
-                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
-
+                userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
+                locale: 'en-NZ',
+                timezoneId: 'Pacific/Auckland',
                 launchOptions: {
                     args: [
                         '--disable-blink-features=AutomationControlled',
                         '--no-sandbox'
                     ]
                 }
-            }
+            },
         },
 
-        /***************************************************************************************************************
-         * FIREFOX (Cloudflare hardened)
-         * userAgent, launchOptions and firefoxUserPrefs required to spoof Cloudflare security checks for:
-         * "Add to cart" AJAX/XHR POST that gets blocked by Cloudflare and turnstiles loaded for Cart and Checkout pages
-         **************************************************************************************************************/
+        // Firefox disabled - add to cart test step failures since 25 February 2026
+        // TODO: Cloudflare security check bypass for Firefox - fix still being investigated/WIP!
 
-        {
-            name: 'firefox',
-            dependencies: ['setup'],
-            use: {
-                ...devices['Desktop Firefox'],
+        // {
+        //     name: 'firefox',
+        //     use: {
+        //         ...devices['Desktop Firefox'],
+        //         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0',
+        //         locale: 'en-NZ',
+        //         timezoneId: 'Pacific/Auckland',
+        //         launchOptions: {
+        //             args: [
+        //                 '--no-sandbox'  // Only this; no Blink flags
+        //             ],
+        //             ignoreDefaultArgs: ['--headless'],
+        //             firefoxUserPrefs: {  // ← Firefox-specific prefs to reduce automation fingerprints
+        //                 'dom.webdriver.enabled': false,  // Disables Selenium-like webdriver flag (though Playwright doesn't use it)
+        //                 'useAutomationExtension': false,  // Prevents automation extensions
+        //                 'general.appname.override': 'Netscape',  // Spoofs app name (minor fingerprint tweak)
+        //                 'general.appversion.override': '5.0 (Windows)',  // Matches UA
+        //                 'general.platform.override': 'Win64',  // Platform spoof
+        //                 'general.useragent.override': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0'  // Reinforces UA (Playwright sets it, but this ensures consistency)
+        //             }
+        //         }
+        //     },
+        // },
 
-                userAgent:
-                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0',
-
-                launchOptions: {
-                    args: ['--no-sandbox'],
-
-                    firefoxUserPrefs: {
-                        'dom.webdriver.enabled': false,
-                        'useAutomationExtension': false,
-                        'media.navigator.enabled': true,
-                        'privacy.resistFingerprinting': false,
-                        'general.platform.override': 'Win64',
-                        'network.http.referer.XOriginPolicy': 0
-                    }
-                }
-            }
-        }
         // Webkit disabled - add to cart test step failures since 25 February 2026
         // TODO: Cloudflare security check bypass for Webkit - fix still being investigated/WIP!
 
@@ -139,5 +122,5 @@ export default defineConfig({
         //   url: 'http://127.0.0.1:3000',
         //   reuseExistingServer: !process.env.CI,
         // },
-    ]
+    ],
 });
