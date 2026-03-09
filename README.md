@@ -17,10 +17,7 @@
   - [JMeter Load Test Integration to measure performance](#jmeter-load-test-integration-to-measure-performance) 
 - [Gotcha's](#gotchas)
   - [1 - Installing Playwright failing due to an unsupported Node.js version](#1-installing-playwright-failed-due-to-an-unsupported-nodejs-version)
-- [TODO / Current Issues](#todo--current-issues)
-  - [1. Tests falling](#1-tests-falling-)
-    - [1.1. Tests failing to add items to cart - Cloudflare security check causing failure](#11-tests-failing-to-add-items-to-cart---cloudflare-security-check-causing-failure)
-    - [1.2. Tests failing to progres to the checkout page - Cloudflare security check causing failure](#12-tests-failing-to-progres-to-the-checkout-page---cloudflare-security-check-causing-failure)
+- [TODO / Current Issues](#to-do--current-issues)
 
 ---
 
@@ -249,60 +246,12 @@ This repository demonstrates:
 
 ---
 
-### TODO / Current Issues
+### TO DO / Current Issues
 
 #### 1. Tests falling: 
 
-#### 1.1. Tests failing to add items to cart - Cloudflare security check causing failure
-
-<details>
-  <summary>Details</summary>
-
-> - This issue started on 03 March 2026.
-> - When items are added to the cart from the product page, the page.request.post to https://testautomation.bigcartel.com/cart.js returns a 403 error, and the test remains stuck on the product page - refer to the API response and Cloudflare HTML response samples below.
-> - Won't be able to address this issue as there is no reliable workaround for the Cloudflare security check triggered.
-> - This is affecting local test runs and the GitHub workflow runs.
->   - The issue was not happening during local runs up until 03 March 2026. 
->   - Failing test steps have been updated to now assert for the 403 response, and original test steps have been commented out with comments noting the issue.
-
-**Playwright test failure error reported in logs:**
-
-```javascript
-    Test timeout of 30000ms exceeded.
-    @ecommerce_test.spec.ts:85
-    Error: page.waitForResponse: Test timeout of 30000ms exceeded.
-```
-
-**API - Cloudflare - 403 Response sample:**
-
-![add-to-cart-CF-403.jpeg](images/add-to-cart-CF-403.jpeg)
-
-**API - Cloudflare - HTML response sample:**
-
-![add-to-cart-CF-403-response-html.jpeg](images/add-to-cart-CF-403-response-html.jpeg)
-
-</details>
-
-[_⇡ Return to the Table of Contents_](#table-of-contents)
-
----
-
-#### 1.2. Tests failing to progres to the checkout page - Cloudflare security check causing failure
-<details>
-  <summary>Details</summary>
-
-> - This issue started on 18 February 2026.
-> - Checkout journey from the cart page to the checkout / payments page fails with a Cloudflare security check page - refer to the Cloudflare security check page sample below.
-> - Won't be able to address this issue as there is no reliable workaround for the Cloudflare security check triggered.
-> - This is affecting local test runs and the GitHub workflow runs.
->   - The issue was not happening during local runs up until 03 March 2026.
->   - Failing test steps have been disabled / commented out with comments noting the issue.
-
-**Cloudflare security check sample:**
-
-![cloudflare-security-check.png](images/cloudflare-security-check.png)
-
-</details>
+1. 🚧 ["Add to cart" AJAX/XHR blocked by Cloudflare - FIREFOX](https://github.com/badj/playwright-poc/issues/4)
+2. 🚧 [Playwright tests for checkout and cart pages loading/triggering Cloudflare security checks - FIREFOX](https://github.com/badj/playwright-poc/issues/6)
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
