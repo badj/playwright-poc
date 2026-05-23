@@ -12,7 +12,7 @@ on:
   pull_request:
     branches: [ main ]
   schedule:
-    - cron: '30 19 * * *'  # 9 am NZT (UTC+12)
+    - cron: '0 5 * * *'  # 5am NZT (UTC+11)
 
 jobs:
   test:
