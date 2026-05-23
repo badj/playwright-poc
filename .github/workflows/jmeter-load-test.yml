@@ -7,7 +7,7 @@ on:
 #  pull_request:
 #    branches: [main]
   schedule:
-    - cron: '00 21 * * *'  # 10 am NZT (UTC+12)
+    - cron: '0 6 * * *'  # 6am NZT (UTC+11)
   workflow_dispatch:  # Allows manual trigger
 
 jobs:
