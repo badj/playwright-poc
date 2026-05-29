@@ -1,4 +1,4 @@
-name: Playwright Tests in Docker
+name: Playwright Tests
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [main]
   schedule:
     - cron: '0 17 * * *'  # 5am NZT (UTC+12)
-  workflow_dispatch:  # Allows manual trigger
+  workflow_dispatch:
 
 jobs:
   test:
@@ -21,27 +21,23 @@ jobs:
         uses: actions/setup-node@v6.3.0
         with:
           node-version: 24
-
-      - name: Cache node_modules
-        uses: actions/cache@v5.0.3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          cache: 'npm'
 
       - name: Install npm dependencies
         run: npm ci
 
-#      Enable this step when switching to use "Run Playwright tests - CI: true" instead of "Run Playwright tests in Docker" step - runtime performance is slower than using docker runner!
-#      - name: Install Playwright browsers
-#        run: npx playwright install --with-deps
+      # === Playwright Browser Caching (Critical fix for hanging) ===
+      - name: Cache Playwright Browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
 
-#      Enable this step when switching to use "Run Playwright tests - CI: true" instead of "Run Playwright tests in Docker" step - runtime performance is slower than using docker runner!
-#      - name: Run Playwright tests
-#        run: npx playwright test
-#        env:
-#          CI: true
-
-      - name: Install Playwright browsers
+      - name: Install Playwright Browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium
 
       - name: Run Playwright tests (headed)
