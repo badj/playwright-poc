@@ -6,13 +6,15 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: '0 17 * * *'
+    - cron: '0 17 * * *'  # 5am NZT
   workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 30   # Safety net so it doesn't run forever
+    container:
+      image: mcr.microsoft.com/playwright:v1.51.0-jammy  # Update version as needed
+    timeout-minutes: 30
 
     steps:
       - name: Checkout code
@@ -27,36 +29,7 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
-      # === Playwright Caching ===
-      - name: Cache Playwright Browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-
-      # === Split Install (Most Reliable Fix) ===
-      - name: Install Playwright Chromium
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install chromium
-
-      - name: Install System Dependencies
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libnss3 \
-            libatk-bridge2.0-0 \
-            libdrm2 \
-            libxcomposite1 \
-            libxdamage1 \
-            libxrandr2 \
-            libgbm1 \
-            libxkbcommon0 \
-            libasound2 \
-            libatspi2.0-0
+      # No more separate browser install or system deps needed!
 
       - name: Run Playwright tests (headed)
         run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" npx playwright test
