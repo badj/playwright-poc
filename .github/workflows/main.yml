@@ -6,12 +6,13 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: '0 17 * * *'  # 5am NZT (UTC+12)
+    - cron: '0 17 * * *'
   workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 30   # Safety net so it doesn't run forever
 
     steps:
       - name: Checkout code
@@ -26,7 +27,7 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
-      # === Playwright Browser Caching (Critical fix for hanging) ===
+      # === Playwright Caching ===
       - name: Cache Playwright Browsers
         uses: actions/cache@v4
         id: playwright-cache
@@ -36,9 +37,26 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-playwright-
 
-      - name: Install Playwright Browsers
+      # === Split Install (Most Reliable Fix) ===
+      - name: Install Playwright Chromium
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
+
+      - name: Install System Dependencies
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libnss3 \
+            libatk-bridge2.0-0 \
+            libdrm2 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxrandr2 \
+            libgbm1 \
+            libxkbcommon0 \
+            libasound2 \
+            libatspi2.0-0
 
       - name: Run Playwright tests (headed)
         run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" npx playwright test
