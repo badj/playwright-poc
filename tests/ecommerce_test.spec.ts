@@ -1,6 +1,6 @@
-import {test, expect, firefox} from '@playwright/test';
+import { test, expect, firefox } from '@playwright/test';
 import { allure } from 'allure-playwright';
-import {chromium} from "playwright-extra";
+import { chromium } from "playwright-extra";
 
 function randomDelay(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -11,7 +11,7 @@ async function humanFill(page: any, locator: any, text: string) {
     await locator.clear({ force: true });
     for (const char of text) {
         await page.keyboard.type(char);
-        await page.waitForTimeout(randomDelay(40, 150));
+        await page.waitForTimeout(randomDelay(40, 120));  // Slightly faster typing for CI
     }
 }
 
@@ -28,7 +28,7 @@ async function isCloudflareChallenge(page: any): Promise<boolean> {
     }
 }
 
-async function waitForCloudflareChallenge(page: any, timeoutMs: number = 30000) {
+async function waitForCloudflareChallenge(page: any, timeoutMs: number = 45000) {  // Increased for CI stability
     if (!(await isCloudflareChallenge(page))) return;
     console.log('⏳ Cloudflare challenge detected – waiting...');
     try {
@@ -36,10 +36,10 @@ async function waitForCloudflareChallenge(page: any, timeoutMs: number = 30000) 
             () => !document.title.includes('Just a moment') && !document.title.includes('Attention Required'),
             { timeout: timeoutMs }
         );
-        await page.waitForTimeout(randomDelay(1500, 3000));
+        await page.waitForTimeout(randomDelay(1000, 2500));
         console.log('✅ Cloudflare resolved');
     } catch {
-        console.warn('⚠️ Cloudflare timeout – proceeding');
+        console.warn('⚠️ Cloudflare timeout – proceeding anyway');
     }
 }
 
@@ -68,6 +68,8 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
     });
 
     test('Search for item → View item → Select options → Add to cart → Verify cart → Proceed to checkout', async ({ page }) => {
+        test.setTimeout(120000);  // 2 minutes for this test in CI
+
         const productName = 'Light Spotted Tabby Cat';
         const colourOption = 'Colour: Grey';
         const ageOption = 'Age: 5YRS';
@@ -107,7 +109,7 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
         // Wait for search results and click the first product
         await page.waitForLoadState('networkidle');
         await waitForCloudflareChallenge(page);
-        await expect(productLink).toBeVisible();
+        await expect(productLink).toBeVisible({ timeout: 15000 });
         await productLink.click();
 
         // Test Case 2: Select product options
@@ -124,7 +126,7 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
         await page.getByRole('combobox', { name: 'Select Age' }).selectOption(ageOption, { force: true });
         await productAgeSelected.isVisible();
 
-        await quantityInput.waitFor({ state: 'visible' });
+        await quantityInput.waitFor({ state: 'visible', timeout: 10000 });
         await humanFill(page, quantityInput, quantity);
         await expect(quantityInput).toHaveValue(quantity);
 
@@ -135,7 +137,7 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
         // Add item to cart
         // TODO: Cloudflare security check bypass for Firefox still being investigated/WIP - Test will fail from here for Firefox!
 
-        await expect(addToCartButton).toBeVisible()
+        await expect(addToCartButton).toBeVisible({ timeout: 10000 });
         await expect(addToCartButton).toBeEnabled();
         await expect(addToCartButton).toContainText(cartTotalPriceWithoutCurrency);
 
@@ -144,13 +146,13 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
 
         await page.waitForResponse((response) =>
                 response.url().includes('/cart.js') && response.status() === 200,
-            { timeout: 15000 }
+            { timeout: 20000 }
         );
         await page.waitForLoadState('networkidle');
         await waitForCloudflareChallenge(page);
 
         // Navigate to cart
-        await expect(goToCartButton).toBeVisible();
+        await expect(goToCartButton).toBeVisible({ timeout: 10000 });
         await expect(goToCartButton).toBeEnabled();
         await goToCartButton.click();
 
@@ -177,7 +179,7 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
         await expect(subtotalAmount).toHaveText(cartTotalPriceWithoutCurrency);
 
         // Test Case 4: Proceed to check out
-        await expect(checkoutButton).toBeVisible();
+        await expect(checkoutButton).toBeVisible({ timeout: 10000 });
         await expect(checkoutButton).toBeEnabled();
         await checkoutButton.click();
 
