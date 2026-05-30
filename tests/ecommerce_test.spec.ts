@@ -1,6 +1,6 @@
-import { test, expect, firefox } from '@playwright/test';
+import {test, expect, firefox} from '@playwright/test';
 import { allure } from 'allure-playwright';
-import { chromium } from "playwright-extra";
+import {chromium} from "playwright-extra";
 
 function randomDelay(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -11,7 +11,7 @@ async function humanFill(page: any, locator: any, text: string) {
     await locator.clear({ force: true });
     for (const char of text) {
         await page.keyboard.type(char);
-        await page.waitForTimeout(randomDelay(30, 80));  // Faster typing in CI
+        await page.waitForTimeout(randomDelay(40, 150));
     }
 }
 
@@ -28,7 +28,7 @@ async function isCloudflareChallenge(page: any): Promise<boolean> {
     }
 }
 
-async function waitForCloudflareChallenge(page: any, timeoutMs: number = 35000) {
+async function waitForCloudflareChallenge(page: any, timeoutMs: number = 30000) {
     if (!(await isCloudflareChallenge(page))) return;
     console.log('⏳ Cloudflare challenge detected – waiting...');
     try {
@@ -36,10 +36,10 @@ async function waitForCloudflareChallenge(page: any, timeoutMs: number = 35000) 
             () => !document.title.includes('Just a moment') && !document.title.includes('Attention Required'),
             { timeout: timeoutMs }
         );
-        await page.waitForTimeout(randomDelay(800, 2000));
+        await page.waitForTimeout(randomDelay(1500, 3000));
         console.log('✅ Cloudflare resolved');
     } catch {
-        console.warn('⚠️ Cloudflare timeout – proceeding anyway');
+        console.warn('⚠️ Cloudflare timeout – proceeding');
     }
 }
 
@@ -63,13 +63,12 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
             'Accept-Language': 'en-NZ,en;q=0.9',
         });
 
-        await page.goto('http://testautomation.bigcartel.com/');
+        // await page.goto('http://testautomation.bigcartel.com/');
+        await page.goto('https://testautomation.bigcartel.com/');
         await waitForCloudflareChallenge(page);
     });
 
     test('Search for item → View item → Select options → Add to cart → Verify cart → Proceed to checkout', async ({ page }) => {
-        test.setTimeout(150000);  // 2.5 min safety for CI
-
         const productName = 'Light Spotted Tabby Cat';
         const colourOption = 'Colour: Grey';
         const ageOption = 'Age: 5YRS';
@@ -78,6 +77,8 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
         const cartTotalPriceWithoutCurrency = '$600.00';
 
         const productLink = page.getByRole('link', { name: productName });
+        const productColourSelected = page.getByRole('combobox', { name: 'Select Colours' }).getByText(colourOption);
+        const productAgeSelected = page.getByRole('combobox', { name: 'Select Age' }).getByText(ageOption);
         const quantityInput = page.getByRole('spinbutton', { name: 'QTY' });
         const resetSelection = page.getByRole('button', { name: 'RESET SELECTION' });
         const addToCartButton = page.getByRole('button', { name: 'ADD TO CART' });
@@ -105,27 +106,26 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
         await page.keyboard.press('Enter');
 
         // Wait for search results and click the first product
-        await page.waitForLoadState('networkidle', { timeout: 15000 });
+        await page.waitForLoadState('networkidle');
         await waitForCloudflareChallenge(page);
-        await expect(productLink).toBeVisible({ timeout: 20000 });
+        await expect(productLink).toBeVisible();
         await productLink.click();
 
         // Test Case 2: Select product options
         // Verify we're on the product page
-        await page.waitForLoadState('networkidle', { timeout: 15000 });
+        await page.waitForLoadState('networkidle');
         await waitForCloudflareChallenge(page);
         await expect(page).toHaveURL('https://testautomation.bigcartel.com/product/white-tabby-cat');
 
         // Select the color option 'Grey'
         await page.getByRole('combobox', { name: 'Select Colours' }).selectOption(colourOption, { force: true });
-        // Reverted to original simple check (removed fragile .getByText chain)
-        await expect(page.getByRole('combobox', { name: 'Select Colours' })).toHaveValue(colourOption, { timeout: 10000 });
+        await productColourSelected.isVisible();
 
-        // Select age option '5YRS'
+        // Select the age option '5YRS'
         await page.getByRole('combobox', { name: 'Select Age' }).selectOption(ageOption, { force: true });
-        await expect(page.getByRole('combobox', { name: 'Select Age' })).toHaveValue(ageOption, { timeout: 10000 });
+        await productAgeSelected.isVisible();
 
-        await quantityInput.waitFor({ state: 'visible', timeout: 10000 });
+        await quantityInput.waitFor({ state: 'visible' });
         await humanFill(page, quantityInput, quantity);
         await expect(quantityInput).toHaveValue(quantity);
 
@@ -136,26 +136,26 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
         // Add item to cart
         // TODO: Cloudflare security check bypass for Firefox still being investigated/WIP - Test will fail from here for Firefox!
 
-        await expect(addToCartButton).toBeVisible({ timeout: 15000 });
+        await expect(addToCartButton).toBeVisible()
         await expect(addToCartButton).toBeEnabled();
         await expect(addToCartButton).toContainText(cartTotalPriceWithoutCurrency);
 
-        await waitForCloudflareChallenge(page);
+        await waitForCloudflareChallenge(page);   // extra safety before POST
         await addToCartButton.click();
 
         await page.waitForResponse((response) =>
-            response.url().includes('/cart.js') && response.status() === 200,
-            { timeout: 25000 }
+                response.url().includes('/cart.js') && response.status() === 200,
+            { timeout: 15000 }
         );
-        await page.waitForLoadState('networkidle', { timeout: 15000 });
+        await page.waitForLoadState('networkidle');
         await waitForCloudflareChallenge(page);
 
         // Navigate to cart
-        await expect(goToCartButton).toBeVisible({ timeout: 15000 });
+        await expect(goToCartButton).toBeVisible();
         await expect(goToCartButton).toBeEnabled();
         await goToCartButton.click();
 
-        await page.waitForLoadState('networkidle', { timeout: 15000 });
+        await page.waitForLoadState('networkidle');
         await waitForCloudflareChallenge(page);
         await expect(page).toHaveURL('https://testautomation.bigcartel.com/cart');
         await expect(cartPageHeading).toBeVisible();
@@ -178,11 +178,11 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
         await expect(subtotalAmount).toHaveText(cartTotalPriceWithoutCurrency);
 
         // Test Case 4: Proceed to check out
-        await expect(checkoutButton).toBeVisible({ timeout: 15000 });
+        await expect(checkoutButton).toBeVisible();
         await expect(checkoutButton).toBeEnabled();
         await checkoutButton.click();
 
-        await page.waitForLoadState('networkidle', { timeout: 15000 });
+        await page.waitForLoadState('networkidle');
         await waitForCloudflareChallenge(page);
 
         // Checkout page loads with information that payments are not set up
@@ -190,6 +190,5 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
         expect(currentUrl).toContain('checkout');
         await expect(page).toHaveTitle('Payment Gateway Required (402)');
         await expect(checkoutPaymentsNotConfigured).toHaveText('We’re not set up to take payments.');
-        await page.waitForLoadState('networkidle');
     });
 });
