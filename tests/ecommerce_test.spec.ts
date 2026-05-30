@@ -1,5 +1,4 @@
-import {test, expect, firefox} from '@playwright/test';
-import { allure } from 'allure-playwright';
+import {test, expect} from '@playwright/test';
 import {chromium} from "playwright-extra";
 
 function randomDelay(min: number, max: number): number {
@@ -21,8 +20,7 @@ async function isCloudflareChallenge(page: any): Promise<boolean> {
         if (title.includes('Just a moment') || title.includes('Attention Required') || title.includes('Checking your browser')) {
             return true;
         }
-        const hasTurnstile = await page.locator('iframe[src*="challenges.cloudflare.com"]').isVisible().catch(() => false);
-        return hasTurnstile;
+        return await page.locator('iframe[src*="challenges.cloudflare.com"]').isVisible().catch(() => false);
     } catch {
         return false;
     }
@@ -38,8 +36,10 @@ async function waitForCloudflareChallenge(page: any, timeoutMs: number = 30000) 
         );
         await page.waitForTimeout(randomDelay(1500, 3000));
         console.log('✅ Cloudflare resolved');
-    } catch {
-        console.warn('⚠️ Cloudflare timeout – proceeding');
+    } catch (error) {
+        console.warn('⚠️ Cloudflare timeout – proceeding anyway');
+        // Take a screenshot for debugging
+        await page.screenshot({ path: `cloudflare-timeout-${Date.now()}.png` }).catch(() => {});
     }
 }
 
@@ -68,6 +68,8 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
     });
 
     test('Search for item → View item → Select options → Add to cart → Verify cart → Proceed to checkout', async ({ page }) => {
+        test.setTimeout(120000); // 2 minutes for CI environments
+
         const productName = 'Light Spotted Tabby Cat';
         const colourOption = 'Colour: Grey';
         const ageOption = 'Age: 5YRS';
@@ -177,17 +179,25 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
         await expect(subtotalAmount).toHaveText(cartTotalPriceWithoutCurrency);
 
         // Test Case 4: Proceed to check out
-        await expect(checkoutButton).toBeVisible();
+        await page.waitForTimeout(2000); // Give page time to stabilize
+        await expect(checkoutButton).toBeVisible({ timeout: 15000 });
         await expect(checkoutButton).toBeEnabled();
+        await waitForCloudflareChallenge(page);   // Add check before clicking
         await checkoutButton.click();
 
-        await page.waitForLoadState('networkidle');
-        await waitForCloudflareChallenge(page);
+        // More robust waiting for checkout page
+        await Promise.race([
+            page.waitForURL('**/checkout', { timeout: 30000 }),
+            page.waitForLoadState('networkidle', { timeout: 30000 })
+        ]);
+        await waitForCloudflareChallenge(page, 60000); // Longer timeout for checkout
 
         // Checkout page loads with information that payments are not set up
+        await page.waitForTimeout(2000); // Additional buffer
         const currentUrl = page.url();
+        console.log('Current URL:', currentUrl); // Debug logging
         expect(currentUrl).toContain('checkout');
-        await expect(page).toHaveTitle('Payment Gateway Required (402)');
-        await expect(checkoutPaymentsNotConfigured).toHaveText('We’re not set up to take payments.');
+        await expect(page).toHaveTitle('Payment Gateway Required (402)', { timeout: 10000 });
+        await expect(checkoutPaymentsNotConfigured).toHaveText(`We’re not set up to take payments.`, { timeout: 10000 });
     });
 });
