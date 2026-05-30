@@ -25,15 +25,15 @@ export default defineConfig({
 
     use: {
         baseURL: 'https://testautomation.bigcartel.com/',
-        screenshot: 'on',
-        // screenshot: 'only-on-failure',
-        video: 'on',
-        // video: 'retain-on-failure',
+        // screenshot: 'on',
+        screenshot: 'only-on-failure',
+        // video: 'on',
+        video: 'retain-on-failure',
         // video: 'on-first-retry',
         // Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer
-        trace: 'on',
+        // trace: 'on',
         // trace: 'retain-on-failure',
-        // trace: 'on-first-retry',
+        trace: 'on-first-retry',
         headless: false,  // Keep this temporarily for debugging (run with --headed)
     },
 

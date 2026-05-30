@@ -106,7 +106,7 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
         await page.keyboard.press('Enter');
 
         // Wait for search results and click the first product
-        await page.waitForLoadState('networkidle');
+        await page.waitForLoadState('domcontentloaded');
         await waitForCloudflareChallenge(page);
         await expect(productLink).toBeVisible();
         await productLink.click();
@@ -147,7 +147,7 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
                 response.url().includes('/cart.js') && response.status() === 200,
             { timeout: 15000 }
         );
-        await page.waitForLoadState('networkidle');
+        await page.waitForLoadState('domcontentloaded');
         await waitForCloudflareChallenge(page);
 
         // Navigate to cart
@@ -155,7 +155,7 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
         await expect(goToCartButton).toBeEnabled();
         await goToCartButton.click();
 
-        await page.waitForLoadState('networkidle');
+        await page.waitForLoadState('domcontentloaded');
         await waitForCloudflareChallenge(page);
         await expect(page).toHaveURL('https://testautomation.bigcartel.com/cart');
         await expect(cartPageHeading).toBeVisible();
@@ -182,7 +182,7 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
         await expect(checkoutButton).toBeEnabled();
         await checkoutButton.click();
 
-        await page.waitForLoadState('networkidle');
+        await page.waitForLoadState('domcontentloaded');
         await waitForCloudflareChallenge(page);
 
         // Checkout page loads with information that payments are not set up
