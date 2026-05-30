@@ -78,8 +78,6 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
         const cartTotalPriceWithoutCurrency = '$600.00';
 
         const productLink = page.getByRole('link', { name: productName });
-        const productColourSelected = page.getByRole('combobox', { name: 'Select Colours' }).getByText(colourOption);
-        const productAgeSelected = page.getByRole('combobox', { name: 'Select Age' }).getByText(ageOption);
         const quantityInput = page.getByRole('spinbutton', { name: 'QTY' });
         const resetSelection = page.getByRole('button', { name: 'RESET SELECTION' });
         const addToCartButton = page.getByRole('button', { name: 'ADD TO CART' });
@@ -120,11 +118,12 @@ test.describe('E-commerce Store Automation (Cloudflare-bypassed)', () => {
 
         // Select the color option 'Grey'
         await page.getByRole('combobox', { name: 'Select Colours' }).selectOption(colourOption, { force: true });
-        await expect(productColourSelected).toBeVisible({ timeout: 10000 });
+        // Reverted to original simple check (removed fragile .getByText chain)
+        await expect(page.getByRole('combobox', { name: 'Select Colours' })).toHaveValue(colourOption, { timeout: 10000 });
 
         // Select age option '5YRS'
         await page.getByRole('combobox', { name: 'Select Age' }).selectOption(ageOption, { force: true });
-        await expect(productAgeSelected).toBeVisible({ timeout: 10000 });
+        await expect(page.getByRole('combobox', { name: 'Select Age' })).toHaveValue(ageOption, { timeout: 10000 });
 
         await quantityInput.waitFor({ state: 'visible', timeout: 10000 });
         await humanFill(page, quantityInput, quantity);
