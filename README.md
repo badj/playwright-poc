@@ -45,7 +45,7 @@ This repository demonstrates:
 ---
 ### Project information
 
-> This project repo contains a functional journey test to verify multiple areas of the e-commerce checkout flow
+> This project repo contains a functional journey test verifying multiple areas of the e-commerce checkout flow
 
 - Search for an item in the store.
 - View a product from the search results.
