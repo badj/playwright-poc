@@ -14,6 +14,9 @@ on:
   schedule:
     - cron: '0 17 * * *'  # 5am NZT (UTC+12)
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -21,17 +24,17 @@ jobs:
     steps:
       # Step 1: Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
 
       # Step 2: Set up Node.js
       - name: Set up Node.js
-        uses: actions/setup-node@v6.3.0
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f  # v6.3.0
         with:
           node-version: '24'
 
       # Step 3: Install Java (required for Allure CLI)
       - name: Set up Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9  # v4
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -58,6 +61,7 @@ jobs:
       - name: Install Allure CLI
         run: |
           wget https://github.com/allure-framework/allure2/releases/download/2.29.0/allure-2.29.0.tgz
+          echo "a217155db9670ab36ce7b0569b3fb0530a657c81bd7ce5bc974f0bba2a4d84fb  allure-2.29.0.tgz" | sha256sum -c -
           mkdir -p $GITHUB_WORKSPACE/allure
           tar -zxvf allure-2.29.0.tgz -C $GITHUB_WORKSPACE/allure
           echo "$GITHUB_WORKSPACE/allure/allure-2.29.0/bin" >> $GITHUB_PATH
@@ -82,7 +86,7 @@ jobs:
 
       # Step 10: Upload Allure report as artifact
       - name: Upload Allure report
-        uses: actions/upload-artifact@v7.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
         with:
           name: allure-report
           path: allure-report/

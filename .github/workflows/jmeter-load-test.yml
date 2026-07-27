@@ -10,16 +10,19 @@ on:
     - cron: '0 18 * * *'  # 6am NZT (UTC+12)
   workflow_dispatch:  # Allows manual trigger
 
+permissions:
+  contents: read
+
 jobs:
   load-test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
 
       - name: Set up Java
-        uses: actions/setup-java@v5.2.0
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654  # v5.2.0
         with:
           distribution: 'temurin'
           java-version: '17'  # JMeter compatible
@@ -27,6 +30,7 @@ jobs:
       - name: Download JMeter
         run: |
           wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz
+          echo "5978a1a35edb5a7d428e270564ff49d2b1b257a65e17a759d259a9283fc17093e522fe46f474a043864aea6910683486340706d745fcdf3db1505fd71e689083 *apache-jmeter-5.6.3.tgz" | sha512sum -c -
           tar -xzf apache-jmeter-5.6.3.tgz
           mv apache-jmeter-5.6.3 jmeter
 
@@ -35,7 +39,7 @@ jobs:
           ./jmeter/bin/jmeter -n -t performance-tests/load-test.jmx -l results.jtl -e -o dashboard
 
       - name: Upload JMeter Test Results
-        uses: actions/upload-artifact@v7.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
         with:
           name: jmeter-results
           path: |

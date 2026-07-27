@@ -6,6 +6,15 @@ import * as os from "node:os";
  * ****************************************************/
 
 export default defineConfig({
+    webServer: {
+        command:
+            'java -jar wiremock-jre8-standalone-2.35.0.jar --port 8080 --enable-browser-proxying --disable-banner --no-request-journal --verbose',
+        url: 'http://localhost:8080/__admin/mappings',
+        reuseExistingServer: !process.env.CI,
+        timeout: 30_000,
+        stdout: 'pipe',
+        stderr: 'pipe',
+    },
     testDir: './tests',
     fullyParallel: true,
     forbidOnly: !!process.env.CI,
