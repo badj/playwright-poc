@@ -6,15 +6,19 @@ import * as os from "node:os";
  * ****************************************************/
 
 export default defineConfig({
-    webServer: {
-        command:
-            'java -jar wiremock-jre8-standalone-2.35.0.jar --port 8080 --enable-browser-proxying --disable-banner --no-request-journal --verbose',
-        url: 'http://localhost:8080/__admin/mappings',
-        reuseExistingServer: !process.env.CI,
-        timeout: 30_000,
-        stdout: 'pipe',
-        stderr: 'pipe',
-    },
+    // WireMock stub server for local API tests only — CI has neither Java nor the
+    // standalone JAR (untracked/gitignored), so starting it there fails the whole run.
+    ...(process.env.CI ? {} : {
+        webServer: {
+            command:
+                'java -jar wiremock-jre8-standalone-2.35.0.jar --port 8080 --enable-browser-proxying --disable-banner --no-request-journal --verbose',
+            url: 'http://localhost:8080/__admin/mappings',
+            reuseExistingServer: true,
+            timeout: 30_000,
+            stdout: 'pipe',
+            stderr: 'pipe',
+        },
+    }),
     testDir: './tests',
     fullyParallel: true,
     forbidOnly: !!process.env.CI,

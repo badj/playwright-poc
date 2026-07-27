@@ -43,7 +43,7 @@ jobs:
         with:
           name: monocart-report
           path: monocart-report/
-          retention-days: 14
+          retention-days: 5
 
       - name: Upload Playwright HTML report
         if: always()
