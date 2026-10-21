@@ -1,0 +1,97 @@
+name: Publish Test Reports
+
+# Publishes the latest reports from both test workflows to GitHub Pages: https://badj.github.io/playwright-poc/
+#  - Runs when "Playwright Tests" or "JMeter Performance Tests in Docker" completes on main (never for pull requests).
+#  - Each Pages deploy replaces the whole site, so every publish collects the latest reports from BOTH workflows -
+#    the Playwright and JMeter reports never overwrite each other.
+#  - Reports come from the workflows' artifacts (kept for 2 days); a report whose artifact is missing shows as unavailable.
+
+on:
+  workflow_run:
+    workflows: ['Playwright Tests', 'JMeter Performance Tests in Docker']
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.event != 'pull_request'
+    runs-on: ubuntu-24.04  # pinned; ubuntu-latest moves to Ubuntu 26 from Oct 2026
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read  # list runs and download their artifacts
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+
+      - name: Download latest reports
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          # Latest completed main-branch run (not a pull request) of workflow $1 that still has artifact $2
+          latest_run() {
+            for id in $(gh run list -R "$REPO" --workflow "$1" --branch main --status completed --limit 10 \
+                          --json databaseId,event --jq '.[] | select(.event != "pull_request") | .databaseId'); do
+              if gh api "repos/$REPO/actions/runs/$id/artifacts" --jq ".artifacts[] | select(.name == \"$2\" and .expired == false) | .id" | grep -q .; then
+                echo "$id"; return
+              fi
+            done
+          }
+          # Downloads artifact $2 of run $1 into directory $3
+          download() {
+            gh run download "$1" -R "$REPO" -n "$2" -D "$3" || echo "::warning::Artifact $2 not found in run $1"
+          }
+          # Writes the run details of run $1 to the environment with prefix $2 (used by the landing page)
+          run_details() {
+            gh run view "$1" -R "$REPO" --json number,conclusion,event,headSha,url,createdAt \
+              --jq "\"$2_RUN_NUMBER=\(.number)\n$2_STATUS=\(.conclusion)\n$2_EVENT=\(.event)\n$2_SHA=\(.headSha)\n$2_RUN_URL=\(.url)\n$2_DATE=\(.createdAt)\"" >> "$GITHUB_ENV"
+          }
+
+          PW_RUN=$(latest_run main.yml playwright-report)
+          if [ -n "$PW_RUN" ]; then
+            echo "Playwright Tests run: $PW_RUN"
+            download "$PW_RUN" test-health-report test-results
+            download "$PW_RUN" playwright-report playwright-report
+            download "$PW_RUN" monocart-report monocart-report
+            download "$PW_RUN" allure-report allure-report
+            run_details "$PW_RUN" PW
+          else
+            echo "::warning::No Playwright Tests run with reports found"
+          fi
+
+          JM_RUN=$(latest_run jmeter-load-test.yml jmeter-results)
+          if [ -n "$JM_RUN" ]; then
+            echo "JMeter run: $JM_RUN"
+            download "$JM_RUN" jmeter-results jmeter-results
+            run_details "$JM_RUN" JM
+          else
+            echo "::warning::No JMeter run with reports found"
+          fi
+
+      - name: Build report site
+        run: node scripts/build-report-site.js
+
+      - name: Upload report site
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # v5.0.0
+        with:
+          path: site/
+          retention-days: 1
+
+      - name: Deploy reports to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346  # v5.0.1

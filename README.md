@@ -232,16 +232,21 @@ This repository demonstrates:
 
 #### Published test reports on GitHub Pages
 
-> 🔗 **[https://badj.github.io/playwright-poc/](https://badj.github.io/playwright-poc/)** - the reports from the latest CI run on `main`, viewable in the browser without downloading artifacts.
+> 🔗 **[https://badj.github.io/playwright-poc/](https://badj.github.io/playwright-poc/)** - the latest functional and performance test reports from `main`, viewable in the browser without downloading artifacts.
 
-- The landing page shows the latest run number *(linked to the GitHub Actions run)*, pass/fail status, trigger and commit, with links to:
-  - [Test Health Report](https://badj.github.io/playwright-poc/health/) *(Playwright AI Reporter)*
-  - [Playwright HTML Report](https://badj.github.io/playwright-poc/playwright/)
-  - [Monocart Report](https://badj.github.io/playwright-poc/monocart/)
-  - [Allure Report](https://badj.github.io/playwright-poc/allure/) *(generated with [Allure 3](https://allurereport.org/docs/v3/) - npm based, no Java required)*
-- Published by the `deploy-reports` job in [main.yml](.github/workflows/main.yml) after every daily scheduled run, push to `main` and manual run - **pull request runs are never published**.
+- The landing page has a section per test workflow, each showing its latest run number *(linked to the GitHub Actions run)*, pass/fail status, trigger and commit:
+  - **Functional tests** *(Playwright Tests workflow)*:
+    - [Test Health Report](https://badj.github.io/playwright-poc/health/) *(Playwright AI Reporter)*
+    - [Playwright HTML Report](https://badj.github.io/playwright-poc/playwright/)
+    - [Monocart Report](https://badj.github.io/playwright-poc/monocart/)
+    - [Allure Report](https://badj.github.io/playwright-poc/allure/) *(generated with [Allure 3](https://allurereport.org/docs/v3/) - npm based, no Java required)*
+  - **Performance tests** *(JMeter Performance Tests workflow)*:
+    - [JMeter Dashboard](https://badj.github.io/playwright-poc/jmeter/)
+- **How it is published:** the [publish-reports.yml](.github/workflows/publish-reports.yml) workflow runs whenever the Playwright Tests or JMeter workflow completes on `main` *(scheduled, push and manual runs - **pull request runs are never published**)*, or manually from the Actions tab.
+  - A GitHub Pages deploy replaces the whole site, so every publish collects the latest reports from **both** workflows' artifacts - the functional and performance reports never overwrite each other.
+  - If a report's artifact is missing *(e.g. a workflow failed before uploading it, or it expired after 2 days)*, it is shown as unavailable.
 - The reports are published even when tests fail, so failures can be investigated from the link.
-- Each run replaces the previous one - only the latest run is published. Reports from older runs are available as artifacts on each workflow run *(kept for 2 days)*.
+- Only the latest run of each workflow is published. Reports from older runs are available as artifacts on each workflow run *(kept for 2 days)*.
 - The site is built by [scripts/build-report-site.js](scripts/build-report-site.js) - to preview it locally after a test run:
   ```bash
   node scripts/build-report-site.js && open site/index.html
@@ -264,12 +269,13 @@ This repository demonstrates:
     - Loop Controller continue forever: false
     - ⚠️ Keep thread group configurations set to the original low values to reduce the impact of the load test on the e-commerce store to prevent Cloudflare new request throttling!
 - **The workflow:** 
-  - Runs daily at 10:30 am NZT (UTC+12). 
+  - Runs daily at 6:00 am NZT (UTC+12). 
   - "on push and pull_request" to branches "main" disabled (⚠️ Caused Cloudflare security check issues that made the Playwright tests fail - keep disabled!)
   - Installs JMeter. 
   - Executes the JMeter load tests against the ["Test Automation - Big Cartel E-commerce Test store"](https://testautomation.bigcartel.com/) Landing page, Products page and Cart page.
   - Jmeter tests Generate a dashboard (HTML report) and .jtl results. 
   - Uploads artifacts for review (view in GitHub Actions UI). 
+  - 🔗 The JMeter dashboard is published to GitHub Pages: [https://badj.github.io/playwright-poc/jmeter/](https://badj.github.io/playwright-poc/jmeter/) - see [Published test reports on GitHub Pages](#published-test-reports-on-github-pages).
   - Prints a summary for quick analysis (e.g., avg response time, error rate).
 - ⚠️ **Run the JMeter tests locally:**
   - [Download and install Java 8+ installed (JMeter requires it) from Oracle Downloads](https://www.oracle.com/java/technologies/downloads/)
