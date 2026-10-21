@@ -20,7 +20,20 @@ export default defineConfig({
         ['html', { open: 'never' }],
         ['line'],
         ['allure-playwright', { outputFolder: 'allure-results', environmentInfo: { OS: os.platform(), NodeVersion: process.version } }],
-        ['monocart-reporter', { name: "Playwright POC Test Report", outputFile: './monocart-report/index.html'}]
+        ['monocart-reporter', { name: "Playwright POC Test Report", outputFile: './monocart-report/index.html'}],
+        // Report is written to Playwright's outputDir (test-results/) regardless of the reporter's own outputDir option.
+        // History is kept outside it, since test-results/ is emptied every run and would wipe the flaky-detection history
+        ['playwright-ai-reporter', {
+            historyFile: './ai-reporter-results/history.json',
+            slowTestThreshold: 10,
+            maxSlowTestsToShow: 5,
+            showStackTrace: true,
+            generateFix: !!process.env.AI_PROVIDER,
+            createBug: false,
+            generatePR: false,
+            publishToDB: false,
+            sendEmail: false,
+        }]
     ],
 
     use: {

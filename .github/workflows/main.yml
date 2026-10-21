@@ -34,8 +34,38 @@ jobs:
 
       # No more separate browser install or system deps needed!
 
+      # playwright-ai-reporter keeps the last 30 runs here for flaky detection and the trend panel
+      - name: Restore test history
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+        with:
+          path: ai-reporter-results/history.json
+          key: test-history-${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: test-history-${{ github.ref_name }}-
+
       - name: Run Playwright tests (headed)
         run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" npx playwright test
+        env:
+          # AI failure analysis runs only when the ANTHROPIC_API_KEY repo secret is set, and never on pull requests
+          AI_PROVIDER: ${{ github.event_name != 'pull_request' && secrets.ANTHROPIC_API_KEY != '' && 'anthropic' || '' }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: claude-sonnet-5-5
+
+      - name: Save test history
+        if: always()
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+        with:
+          path: ai-reporter-results/history.json
+          key: test-history-${{ github.ref_name }}-${{ github.run_id }}
+
+      - name: Upload Test Health Report
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
+        with:
+          name: test-health-report
+          path: |
+            test-results/test-health-report.html
+            test-results/fixes/
+          retention-days: 5
 
       - name: Upload Monocart report artifact
         if: always()
