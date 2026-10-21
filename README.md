@@ -241,7 +241,7 @@ This repository demonstrates:
   - [Allure Report](https://badj.github.io/playwright-poc/allure/) *(generated with [Allure 3](https://allurereport.org/docs/v3/) - npm based, no Java required)*
 - Published by the `deploy-reports` job in [main.yml](.github/workflows/main.yml) after every daily scheduled run, push to `main` and manual run - **pull request runs are never published**.
 - The reports are published even when tests fail, so failures can be investigated from the link.
-- Each run replaces the previous one - only the latest run is published. Reports from older runs are available as artifacts on each workflow run *(kept for 5 days)*.
+- Each run replaces the previous one - only the latest run is published. Reports from older runs are available as artifacts on each workflow run *(kept for 2 days)*.
 - The site is built by [scripts/build-report-site.js](scripts/build-report-site.js) - to preview it locally after a test run:
   ```bash
   node scripts/build-report-site.js && open site/index.html

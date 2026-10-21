@@ -45,6 +45,7 @@ jobs:
           path: |
             results.jtl
             dashboard/
+          retention-days: 2
 
       - name: Analyze JMeter Test Results
         run: |

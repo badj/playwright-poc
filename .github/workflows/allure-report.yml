@@ -90,4 +90,5 @@ jobs:
         with:
           name: allure-report
           path: allure-report/
+          retention-days: 2
         if: always()
