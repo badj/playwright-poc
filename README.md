@@ -1,6 +1,6 @@
 # Playwright POC
 
-> A proof of concept to showcase the implementation of [Playwright](https://playwright.dev/) as a test framework with multiple test reporters *([Monocart](https://github.com/cenfun/monocart-reporter) and [Allure](https://allurereport.org/))* that test the checkout flow and [Apache JMeter](https://jmeter.apache.org/) load test integration to measure performance for the ["Test Automation - Big Cartel E-commerce Test store"](https://testautomation.bigcartel.com/).
+> A proof of concept to showcase the implementation of [Playwright](https://playwright.dev/) as a test framework with multiple test reporters *([Monocart](https://github.com/cenfun/monocart-reporter), [Allure](https://allurereport.org/) and [Playwright AI Reporter](https://github.com/deepakkamboj/playwright-ai-reporter))* that test the checkout flow and [Apache JMeter](https://jmeter.apache.org/) load test integration to measure performance for the ["Test Automation - Big Cartel E-commerce Test store"](https://testautomation.bigcartel.com/).
 
 ---
 ### Table of contents
@@ -14,6 +14,7 @@
   - [Test run with Playwright HTML report generation](#test-run-with-playwright-html-report-generation)
   - [Test run with Monocart report generation](#test-run-with-monocart-report-generation)
   - [Test run with Allure report generation](#test-run-with-allure-report-generation)
+  - [Test run with Playwright AI Reporter - Test Health Report generation](#test-run-with-playwright-ai-reporter---test-health-report-generation)
   - [JMeter Load Test Integration to measure performance](#jmeter-load-test-integration-to-measure-performance) 
 - [Gotcha's](#gotchas)
   - [1 - Installing Playwright failing due to an unsupported Node.js version](#1-installing-playwright-failed-due-to-an-unsupported-nodejs-version)
@@ -30,6 +31,7 @@ This repository demonstrates:
    - [Built-in/Default Playwright HTML reporter](https://playwright.dev/docs/test-reporters)
    - [Monocart reporter](https://github.com/cenfun/monocart-reporter)
    - [Allure reporter](https://allurereport.org/)
+   - [Playwright AI Reporter](https://github.com/deepakkamboj/playwright-ai-reporter) - Test Health Report with flaky test detection, run trends and optional AI-powered failure analysis *(Anthropic Claude)*
  - CI/CD Integration for [GitHub workflow support](https://github.com/badj/playwright-poc/actions) executing tests in [Docker](https://www.docker.com/) with GitHub Actions triggered on push/pull requests to main and for daily scheduled runs:
    - [![Playwright Tests in Docker](https://github.com/badj/playwright-poc/actions/workflows/main.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/main.yml)
    - [![Playwright Tests with Allure Report](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/allure-report.yml)
@@ -63,7 +65,7 @@ This repository demonstrates:
 ---
 ### Pre-requisites
 
-1. [Node.js](https://nodejs.org/en/download/) (LTS version recommended)
+1. [Node.js](https://nodejs.org/en/download/) (LTS version recommended - **v22 or higher** is required by the Playwright AI Reporter)
 2. [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm/) (Included with Node.js)
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
@@ -156,6 +158,65 @@ This repository demonstrates:
   ```
   Server started at <http://127.0.0.1:56217>. Press <Ctrl+C> to exit
   ```
+[_⇡ Return to the Table of Contents_](#table-of-contents)
+
+#### Test run with Playwright AI Reporter - Test Health Report generation
+
+> [Playwright AI Reporter](https://github.com/deepakkamboj/playwright-ai-reporter) generates a single self-contained HTML **Test Health Report** *(no web server needed)* and can optionally use AI to analyse test failures and suggest fixes.
+
+- **What the report contains:**
+  - Run brief with pass/fail/retry/skip outcome tiles and an investigation worklist.
+  - **Flaky test detection** - each test that did not pass first time is labelled *Flaky*, *New failure* or *Known failure*, based on retries and the run history.
+  - Failure categories *(e.g. "Element not ready", "Assertion timing")*, shared error signatures, embedded screenshots and trace links.
+  - Run trend, slowest tests and worker activity.
+  - **AI fixes** *(optional)* - root cause analysis and a suggested corrected test file for each failing test.
+- **Configuration** is in [playwright.config.ts](playwright.config.ts) - AI analysis is **off** unless the `AI_PROVIDER` environment variable is set.
+- A short summary is also printed to the terminal at the end of every run *(slowest tests, failures with their category and stack trace)*.
+
+1. Execute the test
+   ```bash
+   npx playwright test
+   ```
+2. Open the report when test execution completes - Report is generated in [test-results/test-health-report.html](test-results/test-health-report.html)
+   ```bash
+   open test-results/test-health-report.html
+   ```
+- The report location is printed to the terminal - sample output:
+
+  ```
+  ✓ Generated standalone report: /[path to your repo]/playwright-poc/test-results/test-health-report.html
+  ```
+- Run history *(last 30 runs, used for flaky detection and the trend)* is kept in `ai-reporter-results/history.json` *(git ignored)*, because Playwright empties `test-results/` before every run.
+
+**Optional - run with AI failure analysis (Anthropic Claude):**
+
+> ⚠️ When AI analysis is enabled, the source code and error of each failing test are sent to Anthropic. AI analysis only runs when a test fails - a passing run makes no AI calls and costs nothing.
+
+1. Create an API key in the [Claude Console](https://platform.claude.com) *(Settings → API Keys → Create Key → "Default workspace")* - the API needs credits, and some Claude plans include monthly API credits.
+2. Create a `.env` file in the repo root *(git ignored - never commit it)*:
+   ```bash
+   ANTHROPIC_API_KEY=[your API key]
+   ANTHROPIC_MODEL=claude-sonnet-5-5
+   ```
+3. Execute the tests with the AI provider enabled
+   ```bash
+   AI_PROVIDER=anthropic npx playwright test
+   ```
+4. The AI analysis is shown in the **AI fixes** tab of the report and saved to `test-results/fixes/` - always review AI suggested fixes before applying them.
+
+- ⚠️ **Reporter patch:** the reporter *(v0.1.3)* always sends a `temperature` parameter, which current Claude models reject with `400: temperature is deprecated for this model`. The [scripts/patch-ai-reporter.js](scripts/patch-ai-reporter.js) `postinstall` script patches this automatically on every `npm install` / `npm ci` - remove it once the issue is fixed in the reporter.
+
+**CI/CD - GitHub Actions ([main.yml](.github/workflows/main.yml)):**
+
+- Every run uploads the report as the **`test-health-report`** artifact *(alongside the `monocart-report` and `playwright-report` artifacts)* - download it from the workflow run page in GitHub Actions and open `test-health-report.html`.
+- A test summary is written to the workflow run's **job summary** page.
+- The run history is cached between runs, so flaky detection and the trend build up across the daily scheduled runs.
+- AI analysis in CI runs only when the `ANTHROPIC_API_KEY` repository secret is set, and never on pull requests. To enable it:
+  ```bash
+  gh secret set ANTHROPIC_API_KEY --repo badj/playwright-poc
+  ```
+- If the secret is not set or the API credits run out, the report is still generated without the AI analysis, and the test run result is not affected.
+
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
 #### JMeter load test integration to measure performance
