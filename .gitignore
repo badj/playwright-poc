@@ -27,3 +27,4 @@ node_modules/
 # Local workflow backups
 /workflow-backups/
 ai-reporter-results/
+site/

@@ -15,6 +15,7 @@
   - [Test run with Monocart report generation](#test-run-with-monocart-report-generation)
   - [Test run with Allure report generation](#test-run-with-allure-report-generation)
   - [Test run with Playwright AI Reporter - Test Health Report generation](#test-run-with-playwright-ai-reporter---test-health-report-generation)
+  - [Published test reports on GitHub Pages](#published-test-reports-on-github-pages)
   - [JMeter Load Test Integration to measure performance](#jmeter-load-test-integration-to-measure-performance) 
 - [Gotcha's](#gotchas)
   - [1 - Installing Playwright failing due to an unsupported Node.js version](#1-installing-playwright-failed-due-to-an-unsupported-nodejs-version)
@@ -40,6 +41,7 @@ This repository demonstrates:
    >     - Workflow runs without error in the workspace, generates the artefact, but it doesn't load the report data objects when the index.html is viewed in the downloaded artefact due to a `blocked by CORS policy` issue. 
    >     - Using the allure command line tool to open and serve the report from the downloaded artefact root is failing as well and will be investigated at a later stage.
    >     - TODO: Will be updated at some stage to use GitHub Pages instead to resolve the issue.
+   - 🔗 **Latest test reports published on GitHub Pages:** [https://badj.github.io/playwright-poc/](https://badj.github.io/playwright-poc/)
    - [![JMeter Performance Tests in Docker](https://github.com/badj/playwright-poc/actions/workflows/jmeter-load-test.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/jmeter-load-test.yml)
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
@@ -208,6 +210,7 @@ This repository demonstrates:
 
 **CI/CD - GitHub Actions ([main.yml](.github/workflows/main.yml)):**
 
+- 🔗 **View the latest reports online:** [https://badj.github.io/playwright-poc/](https://badj.github.io/playwright-poc/) - see [Published test reports on GitHub Pages](#published-test-reports-on-github-pages).
 - Every run uploads the report as the **`test-health-report`** artifact *(alongside the `monocart-report` and `playwright-report` artifacts)* - download it from the workflow run page in GitHub Actions and open `test-health-report.html`.
 - A test summary is written to the workflow run's **job summary** page.
 - The run history is cached between runs, so flaky detection and the trend build up across the daily scheduled runs.
@@ -216,6 +219,25 @@ This repository demonstrates:
   gh secret set ANTHROPIC_API_KEY --repo badj/playwright-poc
   ```
 - If the secret is not set or the API credits run out, the report is still generated without the AI analysis, and the test run result is not affected.
+
+[_⇡ Return to the Table of Contents_](#table-of-contents)
+
+#### Published test reports on GitHub Pages
+
+> 🔗 **[https://badj.github.io/playwright-poc/](https://badj.github.io/playwright-poc/)** - the reports from the latest CI run on `main`, viewable in the browser without downloading artifacts.
+
+- The landing page shows the latest run number *(linked to the GitHub Actions run)*, pass/fail status, trigger and commit, with links to:
+  - [Test Health Report](https://badj.github.io/playwright-poc/health/) *(Playwright AI Reporter)*
+  - [Playwright HTML Report](https://badj.github.io/playwright-poc/playwright/)
+  - [Monocart Report](https://badj.github.io/playwright-poc/monocart/)
+- Published by the `deploy-reports` job in [main.yml](.github/workflows/main.yml) after every daily scheduled run, push to `main` and manual run - **pull request runs are never published**.
+- The reports are published even when tests fail, so failures can be investigated from the link.
+- Each run replaces the previous one - only the latest run is published. Reports from older runs are available as artifacts on each workflow run *(kept for 5 days)*.
+- The site is built by [scripts/build-report-site.js](scripts/build-report-site.js) - to preview it locally after a test run:
+  ```bash
+  node scripts/build-report-site.js && open site/index.html
+  ```
+- ⚠️ This is a public repository, so the published reports are public too.
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
