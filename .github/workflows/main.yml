@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # pinned; ubuntu-latest moves to Ubuntu 26 from Oct 2026
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-jammy  # Update version as needed
     timeout-minutes: 30
