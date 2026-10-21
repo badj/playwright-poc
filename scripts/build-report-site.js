@@ -4,6 +4,7 @@
  *   site/health/         → Playwright AI Reporter - Test Health Report
  *   site/playwright/     → Playwright HTML report
  *   site/monocart/       → Monocart report
+ *   site/allure/         → Allure report (generated from allure-results/ with Allure 3 before this script runs)
  * Run details come from the RUN_* environment variables set by the workflow; reports that were not generated are listed as unavailable.
  *********************************************************************************************************************/
 const fs = require('node:fs');
@@ -16,6 +17,7 @@ const reports = [
     { dir: 'health', title: 'Test Health Report', detail: 'Playwright AI Reporter - flaky detection, failure categories, trend and AI fixes', from: 'test-results/test-health-report.html', file: true },
     { dir: 'playwright', title: 'Playwright HTML Report', detail: 'Built-in Playwright report with steps, screenshots, videos and traces', from: 'playwright-report' },
     { dir: 'monocart', title: 'Monocart Report', detail: 'Monocart reporter - test results and run metrics', from: 'monocart-report' },
+    { dir: 'allure', title: 'Allure Report', detail: 'Allure 3 report - test results, steps, attachments and environment', from: 'allure-report' },
 ];
 
 fs.rmSync(site, { recursive: true, force: true });

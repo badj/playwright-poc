@@ -84,6 +84,11 @@ jobs:
           retention-days: 5
 
       # Publish the latest reports to GitHub Pages (main branch only - never pull requests)
+      # Allure 3 (npm, no Java) - served over https on Pages, which avoids the CORS issue of opening the report from disk
+      - name: Generate Allure report
+        if: always() && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: npx allure generate allure-results -o allure-report --name "Playwright POC Allure Report"
+
       - name: Build report site for GitHub Pages
         if: always() && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: node scripts/build-report-site.js

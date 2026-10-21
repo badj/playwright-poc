@@ -40,7 +40,7 @@ This repository demonstrates:
    >   - Current Issues: 
    >     - Workflow runs without error in the workspace, generates the artefact, but it doesn't load the report data objects when the index.html is viewed in the downloaded artefact due to a `blocked by CORS policy` issue. 
    >     - Using the allure command line tool to open and serve the report from the downloaded artefact root is failing as well and will be investigated at a later stage.
-   >     - TODO: Will be updated at some stage to use GitHub Pages instead to resolve the issue.
+   >     - ✅ **Resolved with GitHub Pages:** the Allure report is now generated with Allure 3 in the **"Playwright Tests in Docker"** workflow and published to [https://badj.github.io/playwright-poc/allure/](https://badj.github.io/playwright-poc/allure/), where it loads without the CORS issue. The disabled workflow is kept for reference.
    - 🔗 **Latest test reports published on GitHub Pages:** [https://badj.github.io/playwright-poc/](https://badj.github.io/playwright-poc/)
    - [![JMeter Performance Tests in Docker](https://github.com/badj/playwright-poc/actions/workflows/jmeter-load-test.yml/badge.svg)](https://github.com/badj/playwright-poc/actions/workflows/jmeter-load-test.yml)
 
@@ -160,6 +160,14 @@ This repository demonstrates:
   ```
   Server started at <http://127.0.0.1:56217>. Press <Ctrl+C> to exit
   ```
+4. OR Generate and open the report with **Allure 3** *(installed as a project dev dependency - no Java or Allure CLI install required)* - this is what CI uses to publish the [Allure report on GitHub Pages](https://badj.github.io/playwright-poc/allure/)
+   ```bash
+   npx allure generate allure-results -o allure-report --open
+   ```
+- ⚠️ The `allure-results` directory is not cleared between local runs, so the report includes all previous runs and can grow very large - clear it for a report of the latest run only:
+   ```bash
+   rm -rf allure-results && npx playwright test
+   ```
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
 #### Test run with Playwright AI Reporter - Test Health Report generation
@@ -230,6 +238,7 @@ This repository demonstrates:
   - [Test Health Report](https://badj.github.io/playwright-poc/health/) *(Playwright AI Reporter)*
   - [Playwright HTML Report](https://badj.github.io/playwright-poc/playwright/)
   - [Monocart Report](https://badj.github.io/playwright-poc/monocart/)
+  - [Allure Report](https://badj.github.io/playwright-poc/allure/) *(generated with [Allure 3](https://allurereport.org/docs/v3/) - npm based, no Java required)*
 - Published by the `deploy-reports` job in [main.yml](.github/workflows/main.yml) after every daily scheduled run, push to `main` and manual run - **pull request runs are never published**.
 - The reports are published even when tests fail, so failures can be investigated from the link.
 - Each run replaces the previous one - only the latest run is published. Reports from older runs are available as artifacts on each workflow run *(kept for 5 days)*.
